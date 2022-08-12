@@ -1,0 +1,90 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+    {
+      text: "User menu",
+      href: "usermenu"
+    },
+      {
+      text: "Search for claimant",
+      href: "searchClaimant"
+    },
+        {
+      text: "Security clearence",
+      href: "securityLogin"
+    }
+  ]
+}) }}
+
+  <h1 class="govuk-heading-xl">Security clearence</h1>
+
+  <form class="govuk-label--l" action=claimantDetails method="POST">
+
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{{ govukDateInput({
+  fieldset: {
+    legend: {
+      text: "What is your date of birth?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  hint: {
+    text: "For example, 28 12 1922"
+  },
+  errorMessage: {
+    text: "Your date of birth must be in the past"
+  },
+  id: "passport-issued",
+  namePrefix: "passport-issued",
+  items: [
+    {
+      classes: "govuk-input--width-2 govuk-input--error",
+      name: "day",
+      value: ""
+    },
+    {
+      classes: "govuk-input--width-2 govuk-input--error",
+      name: "month",
+      value: ""
+    },
+    {
+      classes: "govuk-input--width-4 govuk-input--error",
+      name: "year",
+      value: ""
+    }
+  ]
+}) }}
+
+<h1 class="govuk-heading-l">Security question #1</h1>
+  <input class="govuk-input govuk-input--width-20" type="password" name="dob" placeholder="What is your mother's maiden name?">
+</br>
+</br>
+<h1 class="govuk-heading-l">Security question #2</h1>
+  <input class="govuk-input govuk-input--width-20" type="password" name="dob" placeholder="What is your pet's name?">
+</br>
+</br>
+    <button class="govuk-button" data-module="govuk-button" type="submit">Submit</button>
+    </form>
+
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

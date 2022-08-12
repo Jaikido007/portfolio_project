@@ -1,0 +1,41 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+    {
+      text: "User menu",
+      href: "usermenu"
+    }
+  ]
+}) }}
+
+  <h1 class="govuk-heading-xl">User menu</h1>
+
+  <form class="govuk-label--l" action=searchClaimant method="POST">
+
+    <button class="govuk-button" data-module="govuk-button" type="search">Search for claimant</button>
+    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="benefitOverview">Benefit overview</button>
+    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="editProfile">Edit profile</button>
+    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="userMaintenance">User maintenance</button>
+
+    </form>
+
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

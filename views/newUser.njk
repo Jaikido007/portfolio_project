@@ -1,0 +1,81 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+
+{# PHASE BANNER #}
+
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{{ govukPhaseBanner({
+tag: {
+    text: "alpha"
+},
+html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+}) }}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+
+        {
+      text: "User menu",
+      href: "userMenu"
+    },
+
+        {
+      text: "User maintenance",
+      href: "userMaintenance"
+    },
+
+        {
+      text: "New user",
+      href: "newUser"
+    }
+  ]
+}) }}
+
+{# CREATE DETAILS #}
+
+<h1 class="govuk-heading-xl">Enter new user details</h1>
+<form class="govuk-label--l" action=newUser method="POST">
+<h1 class="govuk-heading-l">Username</h1>
+<input class="govuk-input govuk-input--width-20" type="text" name="username" placeholder="username" value="{{username}}">
+</br>
+</br>
+<h1 class="govuk-heading-l">Email</h1>
+<input class="govuk-input govuk-input--width-20" type="text" name="email" placeholder="email">
+</br>
+</br>
+<h1 class="govuk-heading-l">Password</h1>
+<input class="govuk-input govuk-input--width-20" type="password" name="password" placeholder="password">
+</br>
+</br>
+<label for="users">User status</label>
+<br>
+<select required class="govuk-input govuk-input--width-20" name="usertype" id="usertype" style='color:gray' oninput='style.color="black"'>
+
+    <option value="" disabled selected>select an option:</option>
+    <option value="admin">Admin</option>
+    <option value="user">User</option>
+</select>
+</br>
+</br>
+<button class="govuk-button" data-module="govuk-button" type="login">
+Submit
+</button>
+</form>
+{% endblock %}
+{% block bodyEnd %}
+{# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+<script src="styles/all.js"></script>
+<script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

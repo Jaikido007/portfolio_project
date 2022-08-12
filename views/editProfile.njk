@@ -1,0 +1,104 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+    {
+      text: "User menu",
+      href: "usermenu"
+    },
+    {
+      text: "Edit profile",
+      href: "editProfile"
+    }
+  ]
+}) }}
+
+  <h1 class="govuk-heading-xl">Edit profile</h1>
+    {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{{ govukSummaryList({
+  rows: [
+    {
+      key: {
+        text: "Username"
+      },
+      value: {
+        text: items.username
+      }
+    },
+
+    {
+      key: {
+        text: "Email"
+      },
+      value: {
+        text: items.email
+      },
+      actions: {
+        items: [
+          {
+            href: "updateEditProfile?field=email",
+            text: "Change",
+            visuallyHiddenText: "email"
+          }
+        ]
+      }
+    },
+
+        {
+      key: {
+        text: "Encrypted password"
+      },
+      value: {
+        text: '********'
+      },
+      actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "password"
+          }
+        ]
+      }
+    },
+
+    {
+      key: {
+        text: "User type"
+      },
+   value: {
+        text: items.type
+      },
+      actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "user type"
+          }
+        ]
+      }
+    }
+  ]
+}) }}
+
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

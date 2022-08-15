@@ -124,7 +124,7 @@ const processWelcomeUser = (request, response) => {
 }
 
 const processAppointeeDetails = (request, response) => {
-    response.render('claimantDetails#appointee-details')
+    response.render('claimantDetails')
 }
 
 
@@ -149,10 +149,9 @@ const processPaymentHistory = (request, response) => {
 }
 
 const processUserMaintenance = (request, response) => {
-    uid = 4
-    webDbController.getSystemUserDetails(uid)
+    webDbController.getSystemUserDetails()
     .then(result => {
-        response.render('userMaintenance', {'items':result.rows[0]})
+        response.render('userMaintenance', {'items':result.rows})
     }
     )
 .catch(error => {
@@ -183,7 +182,12 @@ const processNewUser = (request, response) => {
         encryptedpw = result
         console.log(encryptedpw + ' ' + usertypeno)
         webDbController.insertSystemUser({username, email, encryptedpw, usertypeno})
-        .then (() => response.render('userMaintenance'))
+        .then (() => {
+            webDbController.getSystemUserDetails()
+            .then(result => {
+                response.render('userMaintenance', {'items':result.rows})
+            })
+        })
         .catch (error => {
             console.log(error)
         })
@@ -191,7 +195,17 @@ const processNewUser = (request, response) => {
     .catch(error => {
         console.log(error)
     })
+}
 
+const processSystemUsers = (request, response) => {
+    webDbController.getSystemUserDetails()
+    .then(result => {
+        response.render('userMaintenance', {'items':result.rows})
+    }
+    )
+.catch(error => {
+    console.log(`${chalk.red ("Error: processUserMaintenance " + error)}`)
+}) 
 }
 
 module.exports = {
@@ -212,4 +226,5 @@ module.exports = {
     processPaymentHistory,
     processUserMaintenance,
     processNewUser,
+    processSystemUsers,
 }

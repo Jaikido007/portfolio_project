@@ -33,16 +33,13 @@ app.get('/claimantDetails', (request, response) => {
     response.render('claimantDetails');
 });
 
-app.get('/userMaintenance', (request, response) => {
-    response.render('userMaintenance');
-});
+app.get('/userMaintenance', webController.processSystemUsers);
 
 app.get('/updateEditProfile', webController.processUpdateEditProfile);
 
 app.get('/newUser', (request, response) => {
     response.render('newUser');
 });
-
 
 
 // APP.SET SECTION
@@ -77,10 +74,10 @@ app.post('/welcome',  webController.processWelcomeUser);
 app.post('/searchClaimant', webController.processSearchClaimant);
 app.post('/securityLogin', webController.processSecurityClearence);
 app.post('/claimantDetails', webController.processClaimantDetails);
-app.post('/claimantDetails#appointee-details', webController.processAppointeeDetails);
-app.post('/claimantDetails#bank-details', webController.processBankDetails);
-app.post('/claimantDetails#pension-details', webController.processPensionDetails);
-app.post('/claimantDetails#payment-history', webController.processPaymentHistory);
+// app.post('/claimantDetails',function(request, response, next){console.log(request); next()}, webController.processAppointeeDetails);
+// app.post('/claimantDetails#bank-details', webController.processBankDetails);
+// app.post('/claimantDetails#pension-details', webController.processPensionDetails);
+// app.post('/claimantDetails#payment-history', webController.processPaymentHistory);
 
 app.post('/benefitOverview', webController.processBenefitOverview);
 
@@ -96,8 +93,9 @@ app.post('/changepw', webController.processChangePW);
 
 
 
+
 // ! APP.LISTEN SECTION
 
-app.listen(8000, function() {
+app.listen(8001, function() {
     console.log(`Running on ${chalk.blue("port:")} ${chalk.yellow(PORT)}`);
 })

@@ -24,14 +24,14 @@ const changeUserPW = (username, password) => {
     );
 }
 
-const getSystemUserDetails = (uid) => {
+const getSystemUserDetails = () => {
     let tableName = 'system_users';
     let tableName2 = 'user_types';
     return client.query(
         `SELECT * FROM ${tableName}  
         LEFT JOIN ${tableName2}
         ON ${tableName}.user_type = ${tableName2}.id
-        WHERE ${tableName}.id = ${uid}`,
+        ORDER BY ${tableName}.id`
     );
 }
 

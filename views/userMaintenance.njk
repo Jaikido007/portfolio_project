@@ -44,60 +44,27 @@
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{{ govukTable({
-  caption: "Claimants",
-  captionClasses: "govuk-table__caption--m",
-  firstCellIsHeader: true,
-  head: [
-    {
-      text: "Name",
-      classes: 'govuk-!-width-one-half'
-    },
-    {
-      text: "Email",
-      classes: 'govuk-!-width-one-quarter'
-    },
-    {
-      text: "User type",
-      classes: 'govuk-!-width-one-quarter'
-    }
-  ],
-  rows: [
-    [
-      {
-        text: items.username
-      },
-      {
-        text: items.email
-      },
-      {
-        text: items.user_type
-      }
-    ],
-    [
-      {
-        text: "d"
-      },
-      {
-        text: "e"
-      },
-      {
-        text: "f"
-      }
-    ],
-    [
-      {
-        text: "g"
-      },
-      {
-        text: "h"
-      },
-      {
-        text: "i"
-      }
-    ]
-  ]
-}) }}
+<table class="govuk-table" name="my_table">
+  <tr class="govuk-table__row">
+    <th class="govuk-table__header">Username</th>
+    <th class="govuk-table__header">Email</th>
+    <th class="govuk-table__header">User type</th>
+  </tr>
+
+  {# FOR LOOP #}
+
+    {% for item in items %} 
+
+  <tr class="govuk-table__row">
+    <td class="govuk-table__cell"> {{item.username}} </td>
+    <td class="govuk-table__cell"> {{item.email}} </td>
+    <td class="govuk-table__cell"> {{item.type}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+  {# END OF FOR LOOP #}
 
 <a href="newUser"> <button class="govuk-button" data-module="govuk-button" type="button" formaction="newUser">
   New user

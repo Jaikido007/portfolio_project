@@ -31,7 +31,7 @@
 
   <h1 class="govuk-heading-xl">Security clearence</h1>
 
-  <form class="govuk-label--l" action=claimantDetails method="POST">
+  <form class="govuk-label--l" action=securityLogin method="POST">
 
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
@@ -49,8 +49,8 @@
   errorMessage: {
     text: "Your date of birth must be in the past"
   },
-  id: "passport-issued",
-  namePrefix: "passport-issued",
+  id: "dob",
+  namePrefix: "dob",
   items: [
     {
       classes: "govuk-input--width-2 govuk-input--error",
@@ -71,11 +71,11 @@
 }) }}
 
 <h1 class="govuk-heading-l">Security question #1</h1>
-  <input class="govuk-input govuk-input--width-20" type="password" name="dob" placeholder="What is your mother's maiden name?">
+  <input class="govuk-input govuk-input--width-20" type="password" name="sec1" placeholder="What is your pet's name?">
 </br>
 </br>
 <h1 class="govuk-heading-l">Security question #2</h1>
-  <input class="govuk-input govuk-input--width-20" type="password" name="dob" placeholder="What is your pet's name?">
+  <input class="govuk-input govuk-input--width-20" type="password" name="sec2" placeholder="What is your mother's maiden name?">
 </br>
 </br>
     <button class="govuk-button" data-module="govuk-button" type="submit">Submit</button>

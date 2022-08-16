@@ -29,9 +29,11 @@ app.get('/searchClaimant', (request, response) => {
     response.render('searchClaimant');
 });
 
-app.get('/claimantDetails', (request, response) => {
-    response.render('claimantDetails');
-});
+app.get('/claimantDetails', webController.processClaimantDetails);
+app.get('/appointeeDetails', webController.processAppointeeDetails);
+app.get('/bankDetails', webController.processBankDetails);
+app.get('/pensionDetails', webController.processPensionDetails);
+app.get('/paymentHistory', webController.processPaymentHistory);
 
 app.get('/userMaintenance', webController.processSystemUsers);
 
@@ -40,6 +42,7 @@ app.get('/updateEditProfile', webController.processUpdateEditProfile);
 app.get('/newUser', (request, response) => {
     response.render('newUser');
 });
+
 
 
 // APP.SET SECTION
@@ -72,12 +75,9 @@ app.post('/login',  webController.processLoginUser);
 app.post('/welcome',  webController.processWelcomeUser);
 
 app.post('/searchClaimant', webController.processSearchClaimant);
+app.post('/processSearchClaimant', webController.processSearchClaimant);
 app.post('/securityLogin', webController.processSecurityClearence);
 app.post('/claimantDetails', webController.processClaimantDetails);
-// app.post('/claimantDetails',function(request, response, next){console.log(request); next()}, webController.processAppointeeDetails);
-// app.post('/claimantDetails#bank-details', webController.processBankDetails);
-// app.post('/claimantDetails#pension-details', webController.processPensionDetails);
-// app.post('/claimantDetails#payment-history', webController.processPaymentHistory);
 
 app.post('/benefitOverview', webController.processBenefitOverview);
 

@@ -27,8 +27,8 @@
       href: "securityLogin"
     },
       {
-      text: "Claimant details",
-      href: "claimantDetails"
+      text: "Appointee details",
+      href: "appointeeDetails"
     }
   ]
 }) }}
@@ -39,12 +39,12 @@
     Contents
   </h2>
   <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+    <li class="govuk-tabs__list-item">
       <a class="govuk-tabs__tab" href="/claimantDetails">
         Claimant details
       </a>
     </li>
-    <li class="govuk-tabs__list-item">
+    <li class="govuk-tabs__list-item  govuk-tabs__list-item--selected">
       <a class="govuk-tabs__tab" href="/appointeeDetails">
         Appointee details
       </a>
@@ -65,8 +65,8 @@
       </a>
     </li>
   </ul>
-  <div class="govuk-tabs__panel" id="claimantDetails">
-    <h2 class="govuk-heading-l">Claimant details</h2>
+  <div class="govuk-tabs__panel" id="appointeeDetails">
+    <h2 class="govuk-heading-l">Appointee details</h2>
 
 <dl class="govuk-summary-list">
 
@@ -75,7 +75,7 @@
       NI Number
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.nino}}
+      {{items.app_nino}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -88,7 +88,7 @@
       Title
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.title}}
+      {{items.app_title}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -101,7 +101,7 @@
       First name
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.first_name}}
+      {{items.app_first_name}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -114,7 +114,7 @@
       Last name
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.last_name}}
+      {{items.app_last_name}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -127,7 +127,7 @@
       Date of birth
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.dob}}
+      {{items.app_dob}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -140,7 +140,7 @@
       Address 1
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.address1}}
+      {{items.app_address1}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -153,7 +153,7 @@
       Address 2
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.address2}}
+      {{items.app_address2}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -166,7 +166,7 @@
       Address 3
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.address3}}
+      {{items.app_address3}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -179,7 +179,7 @@
       Town
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.town}}
+      {{items.app_town}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -192,7 +192,7 @@
       County
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.county}}
+      {{items.app_county}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -205,7 +205,7 @@
       Post code
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.postcode}}
+      {{items.app_postcode}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -218,7 +218,7 @@
       Security question 1
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.sec_question1}}
+      {{items.app_sec_question1}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
@@ -231,24 +231,11 @@
       Security question 2
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.sec_question2}}
+      {{items.app_sec_question2}}
     </dd>
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">
         Change<span class="govuk-visually-hidden"> Security question 2</span>
-      </a>
-    </dd>
-  </div>
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Appointee
-    </dt>
-    <dd class="govuk-summary-list__value">
-      {{items.app_title}} {{items.app_first_name}} {{items.app_last_name}}
-    </dd>
-    <dd class="govuk-summary-list__actions">
-      <a class="govuk-link" href="#">
-        Change<span class="govuk-visually-hidden"> Appointee name</span>
       </a>
     </dd>
   </div>

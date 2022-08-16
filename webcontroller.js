@@ -71,9 +71,41 @@ const processChangePW = (request, response) => {
 }
 
 const processSearchClaimant = (request, response) => {
-    console.log("Search claimant")
-    response.render('searchClaimant')
+    let enteredNino = request.body.nino;
+    let newString = tidyString(enteredNino);
+    console.log(newString)
+    console.log(enteredNino)
+    webDbController.verifyNino(newString)
+    .then(result => {
+        if(result.rowCount == 0) {
+            console.log('No such NINO found!')
+            let message = ('Could not verify National Insurance Number.')
+            response.render('searchClaimant', {message});
+        } else {
+            console.log(result)
+            if(result.rows[0].nino === newString) {
+                response.render('securityLogin')
+            } else {
+                let message = ('Entered NINO does not match!')
+                response.render('searchClaimant', {message});
+            }
+
+        }
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processSearchClaimant " + error)}`)
+    })  
 }
+
+const tidyString = (nino => {
+    let alteredString;
+    alteredString = nino.replace(/\s/g, "")
+    alteredString = alteredString.replace(/\-/g, "")
+    alteredString = alteredString.toUpperCase();
+    console.log(alteredString)
+
+    return alteredString;
+})
 
 const processBenefitOverview = (request, response) => {
     console.log("Benefit overview")
@@ -103,14 +135,33 @@ const processUpdateEditProfile = (request, response) => {
 
 const processSecurityClearence = (request, response) => {
     console.log("Security clearence")
-    response.render('securityLogin')
+    console.log(request.body)
+    let dobNum = verifyDOB(request.body['dob-day'], request.body['dob-month'], request.body['dob-year'])
+    let uid=1
+    webDbController.verifySecurityDetails(uid)
+    .then (result => {
+        console.log(dobNum + '------' + result.rows[0].dob);
+        console.log(request.body.sec1 + '--------' + result.rows[0].sec_answer1)
+        console.log(request.body.sec2 + '--------' + result.rows[0].sec_answer2)
+        if (dobNum != result.rows[0].dob || request.body.sec1 != result.rows[0].sec_answer1 || request.body.sec2 != result.rows[0].sec_answer2) {
+            console.log('Its all gone to pot')
+        } else {
+            processClaimantDetails(request, response);
+        }
+    })
+}
+
+const verifyDOB = (day, month, year) => {
+    let dob = day+month+year
+    let dobNum = parseInt(dob)
+    return dobNum;
 }
 
 const processClaimantDetails = (request, response) => {
-
     uid = 1
     webDbController.getClaimantUserDetails(uid)
     .then(result => {
+        console.log(result.rows[0])
         response.render('claimantDetails', {'items':result.rows[0]})
     }
     )
@@ -124,15 +175,25 @@ const processWelcomeUser = (request, response) => {
 }
 
 const processAppointeeDetails = (request, response) => {
-    response.render('claimantDetails')
+        uid = 1
+        webDbController.getAppointeeUserDetails(uid)
+        .then(result => {
+            console.log(result.rows[0])
+            response.render('appointeeDetails', {'items':result.rows[0]})
+        }
+        )
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processAppointeeDetails " + error)}`)
+    })  
 }
+
 
 
 const processBankDetails = (request, response) => {
     uid = 1
-    webDbController.getUserBankDetails(uid)
+    webDbController.getBankUserDetails(uid)
     .then(result => {
-        response.render('claimantDetails#bank-details', {'items':result.rows[0]})
+        response.render('bankDetails', {'items':result.rows[0]})
     }
     )
 .catch(error => {
@@ -141,11 +202,27 @@ const processBankDetails = (request, response) => {
 }
 
 const processPensionDetails = (request, response) => {
-    response.render('claimantDetails#pension-details')
+    uid = 1
+    webDbController.getPensionUserDetails(uid)
+    .then(result => {
+        response.render('pensionDetails', {'items':result.rows[0]})
+    }
+    )
+.catch(error => {
+    console.log(`${chalk.red ("Error: processBankDetails " + error)}`)
+})  
 }
 
 const processPaymentHistory = (request, response) => {
-    response.render('claimantDetails#payment-history')
+    uid = 1
+    webDbController.getPaymentUserHistory(uid)
+    .then(result => {
+        response.render('paymentHistory', {'items':result.rows[0]})
+    }
+    )
+.catch(error => {
+    console.log(`${chalk.red ("Error: processPaymentHistory " + error)}`)
+})  
 }
 
 const processUserMaintenance = (request, response) => {

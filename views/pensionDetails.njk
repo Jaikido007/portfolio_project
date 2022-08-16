@@ -1,0 +1,122 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+    {
+      text: "User menu",
+      href: "usermenu"
+    },
+    {
+      text: "Search for claimant",
+      href: "searchClaimant"
+    },
+    {
+      text: "Security clearence",
+      href: "securityLogin"
+    },
+      {
+      text: "Pension details",
+      href: "pensionDetails"
+    }
+  ]
+}) }}
+<br>
+
+<div class="govuk-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">
+    Contents
+  </h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/claimantDetails">
+        Claimant details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/appointeeDetails">
+        Appointee details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/bankDetails">
+        Bank details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item  govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="/pensionDetails">
+        Pension details
+      </a>
+    </li>
+        <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/paymentHistory">
+        Payment history
+      </a>
+    </li>
+  </ul>
+  <div class="govuk-tabs__panel" id="bankDetails">
+    <h2 class="govuk-heading-l">Pension details</h2>
+
+<dl class="govuk-summary-list">
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Pension type
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.pension_type}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Pension type</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Amount
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.pt_amount}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Amount</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Frequency
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.frequency}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Frequency</span>
+      </a>
+    </dd>
+  </div>
+
+
+</dl>
+
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

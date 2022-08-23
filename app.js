@@ -8,12 +8,27 @@ const {v4: uuidv4} = require('uuid');
 console.log(uuidv4());
 const chalk = require('chalk');
 const PORT = process.env.PORT;
+const sessions = require('express-session');
 
 const webController = require('./webcontroller')
 
 app.use(express.static(path.join('./public/')));
 app.use('assets', express.static(path.join(__dirname, '../assets')));
 
+let PostgreSqlStore = require('connect-pg-simple')(sessions);
+let sessionOptions = {
+    secret:'BobbleHeadSausageFace', 
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 500000
+    },
+    store: new PostgreSqlStore({
+        conString:'postgres://postgres:Password123@localhost:5432/pscs_mock'
+    })
+}
+
+app.use(sessions(sessionOptions));
 
 // APP.GET SECTION
 
@@ -21,12 +36,14 @@ app.get('/login', (request, response) => {
     response.render('welcome');
 });
 
-app.get('/usermenu', (request, response) => {
-    response.render('usermenu');
-});
+app.get('/usermenu', webController.processUserMenu);
 
 app.get('/searchClaimant', (request, response) => {
     response.render('searchClaimant');
+});
+
+app.get('/addClaimantDetails', (request, response) => {
+    response.render('addClaimantDetails');
 });
 
 app.get('/claimantDetails', webController.processClaimantDetails);
@@ -93,6 +110,8 @@ app.post('/changepw', webController.processChangePW);
 app.post('/deleteUser', webController.processDeleteUser);
 app.post('/makeAdmin', webController.processMakeAdmin);
 app.post('/removeAdmin', webController.processRemoveAdmin);
+app.post('/activateUser', webController.processActivateUser);
+app.post('/deactivateUser', webController.processDeactivateUser);
 
 
 

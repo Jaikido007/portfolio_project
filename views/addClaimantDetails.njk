@@ -1,0 +1,260 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+    {
+      text: "User menu",
+      href: "usermenu"
+    },
+    {
+      text: "Search for claimant",
+      href: "searchClaimant"
+    },
+    {
+      text: "Security clearence",
+      href: "securityLogin"
+    },
+      {
+      text: "Claimant details",
+      href: "claimantDetails"
+    }
+  ]
+}) }}
+<br>
+
+<div class="govuk-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">
+    Contents
+  </h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="/claimantDetails">
+        Claimant details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/appointeeDetails">
+        Appointee details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/bankDetails">
+        Bank details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/pensionDetails">
+        Pension details
+      </a>
+    </li>
+        <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/paymentHistory">
+        Payment history
+      </a>
+    </li>
+  </ul>
+  <div class="govuk-tabs__panel" id="claimantDetails">
+    <h2 class="govuk-heading-l">Claimant details</h2>
+
+<dl class="govuk-summary-list">
+
+  <div class="govuk-form-group">
+  <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="nino">
+      National Insurance Number
+    </label>
+  </h1>
+  
+  <input class="govuk-input" id="nino" name="nino" type="text">
+</div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Title
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.title}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Title</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      First name
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.first_name}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> First name</span>
+      </a>
+    </dd>
+  </div>
+<div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Last name
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.last_name}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Last name</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Date of birth
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.dob}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Date of birth</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Address 1
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.address1}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Address 1</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Address 2
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.address2}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Address 2</span>
+      </a>
+    </dd>
+  </div>
+<div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Address 3
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.address3}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Address 3</span>
+      </a>
+    </dd>
+  </div>
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Town
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.town}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Town</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      County
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.county}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> County</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Post code
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.postcode}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Post code</span>
+      </a>
+    </dd>
+  </div>
+<div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Security question 1
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.sec_question1}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Security question 1</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Security question 2
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.sec_question2}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Security question 2</span>
+      </a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Appointee
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.app_title}} {{items.app_first_name}} {{items.app_last_name}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="#">
+        Change<span class="govuk-visually-hidden"> Appointee name</span>
+      </a>
+    </dd>
+  </div>
+
+</dl>
+
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

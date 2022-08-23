@@ -2,6 +2,7 @@ const {encryptPassword, checkEncryptedPassword} = require ('./encrypt_password')
 const chalk = require('chalk');
 const webDbController = require('./webDatabaseController');
 const res = require('express/lib/response');
+let session
 
 const processLoginUser = (request, response) => {
     let username = request.body.username;
@@ -21,7 +22,9 @@ const processLoginUser = (request, response) => {
                     checkEncryptedPassword({password, encryptedpw})
                     .then((result) => {
                         if (result === true) {
-                            // SESSION VARIABLES TO SET UP
+                            session = request.session;
+                            session.username = username
+
                             response.render('usermenu')
                         } else {
                             response.render ('welcome')
@@ -53,6 +56,7 @@ const validateUsername2 = (request, response) => {
 }
 
 const validateUsername = (request, response) => {
+
     response.render('validateUsername')
 }
 
@@ -71,9 +75,17 @@ const processChangePW = (request, response) => {
     })  
 }
 
+processUserMenu = (request, response) => {
+    session = request.session
+    session.claimantNino = null
+    response.render('usermenu')
+}
+
 const processSearchClaimant = (request, response) => {
     let enteredNino = request.body.nino;
     let newString = tidyString(enteredNino);
+    session = request.session
+    session.claimantNino = newString
     console.log(newString)
     console.log(enteredNino)
     webDbController.verifyNino(newString)
@@ -85,7 +97,13 @@ const processSearchClaimant = (request, response) => {
         } else {
             console.log(result)
             if(result.rows[0].nino === newString) {
-                response.render('securityLogin')
+                webDbController.getSecurityQuestions(result.rows[0].nino)
+                .then (result => {
+                    response.render('securityLogin', {items:result.rows[0]})
+                })
+                .catch(error => {
+                    console.log(`${chalk.red ("Error: processSearchClaimant " + error)}`)
+                })  
             } else {
                 let message = ('Entered NINO does not match!')
                 response.render('searchClaimant', {message});
@@ -114,23 +132,25 @@ const processBenefitOverview = (request, response) => {
 }
 
 const processEditProfile = (request, response) => {
-    // TO FIX - this is harddcoded
-    uid = 4
-    webDbController.getSystemUserDetails(uid)
-    .then(result => {
-        response.render('editProfile', {'items':result.rows[0]})
+    session = request.session
+    if(session.username == null){
+        response.render('welcome')
+    } else {
+        console.log('processEditProfile')
+        let username = session.username
+        console.log(username)
+        webDbController.getSystemUserDetails(username)
+        .then(result => {
+            response.render('editProfile', {'items':result.rows[0]})
+        }
+        )
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processEditProfile " + error)}`)
+    })  
     }
-    )
-.catch(error => {
-    console.log(`${chalk.red ("Error: processEditProfile " + error)}`)
-})  
-
 }
 
 const processUpdateEditProfile = (request, response) => {
-    // field = request.body.field
-    console.log(request.body)
-    // console.log(field)
     response.render('updateEditProfile')
 }
 
@@ -138,8 +158,9 @@ const processSecurityClearence = (request, response) => {
     console.log("Security clearence")
     console.log(request.body)
     let dobNum = verifyDOB(request.body['dob-day'], request.body['dob-month'], request.body['dob-year'])
-    let uid=1
-    webDbController.verifySecurityDetails(uid)
+    session = request.session
+    let nino = session.claimantNino
+    webDbController.verifySecurityDetails(nino)
     .then (result => {
         console.log(dobNum + '------' + result.rows[0].dob);
         console.log(request.body.sec1 + '--------' + result.rows[0].sec_answer1)
@@ -159,8 +180,9 @@ const verifyDOB = (day, month, year) => {
 }
 
 const processClaimantDetails = (request, response) => {
-    uid = 1
-    webDbController.getClaimantUserDetails(uid)
+    let session = request.session
+    let nino = session.claimantNino
+    webDbController.getClaimantUserDetails(nino)
     .then(result => {
         console.log(result.rows[0])
         response.render('claimantDetails', {'items':result.rows[0]})
@@ -176,10 +198,10 @@ const processWelcomeUser = (request, response) => {
 }
 
 const processAppointeeDetails = (request, response) => {
-        uid = 1
-        webDbController.getAppointeeUserDetails(uid)
+    let session = request.session
+    let nino = session.claimantNino
+        webDbController.getAppointeeUserDetails(nino)
         .then(result => {
-            console.log(result.rows[0])
             response.render('appointeeDetails', {'items':result.rows[0]})
         }
         )
@@ -191,8 +213,9 @@ const processAppointeeDetails = (request, response) => {
 
 
 const processBankDetails = (request, response) => {
-    uid = 1
-    webDbController.getBankUserDetails(uid)
+    let session = request.session
+    let nino = session.claimantNino
+    webDbController.getBankUserDetails(nino)
     .then(result => {
         response.render('bankDetails', {'items':result.rows[0]})
     }
@@ -203,8 +226,9 @@ const processBankDetails = (request, response) => {
 }
 
 const processPensionDetails = (request, response) => {
-    uid = 1
-    webDbController.getPensionUserDetails(uid)
+    let session = request.session
+    let nino = session.claimantNino
+    webDbController.getPensionUserDetails(nino)
     .then(result => {
         response.render('pensionDetails', {'items':result.rows[0]})
     }
@@ -215,8 +239,9 @@ const processPensionDetails = (request, response) => {
 }
 
 const processPaymentHistory = (request, response) => {
-    uid = 1
-    webDbController.getPaymentUserHistory(uid)
+    let session = request.session
+    let nino = session.claimantNino
+    webDbController.getPaymentUserHistory(nino)
     .then(result => {
         response.render('paymentHistory', {'items':result.rows[0]})
     }
@@ -227,7 +252,7 @@ const processPaymentHistory = (request, response) => {
 }
 
 const processUserMaintenance = (request, response) => {
-    webDbController.getSystemUserDetails()
+    webDbController.getAllSystemUserDetails()
     .then(result => {
         console.log(result)
         response.render('userMaintenance', {'items':result.rows})
@@ -277,7 +302,8 @@ const processNewUser = (request, response) => {
 }
 
 const processSystemUsers = (request, response) => {
-    webDbController.getSystemUserDetails()
+    console.log('I AM HERE!')
+    webDbController.getAllSystemUserDetails()
     .then(result => {
         response.render('userMaintenance', {'items':result.rows})
     }
@@ -312,6 +338,24 @@ const processRemoveAdmin = (request, response) => {
     .catch(() => response.status(500).send('error'));
 }
 
+const processActivateUser = (request, response) => {
+    let uid = request.body.hiddenActivateUserId;
+    console.log(uid)
+    webDbController.activateUserinDB(uid)
+    .then(() => processSystemUsers(request, response))
+    .catch(() => response.status(500).send('error'));
+}
+
+const processDeactivateUser = (request, response) => {
+    let uid = request.body.hiddenDeactivateUserId;
+    console.log(uid)
+    webDbController.deactivateUserinDB(uid)
+    .then(() => processSystemUsers(request, response))
+    .catch(() => response.status(500).send('error'));
+}
+
+
+
 
 module.exports = {
     processLoginUser,
@@ -319,6 +363,7 @@ module.exports = {
     validateUsername,
     validateUsername2,
     processChangePW,
+    processUserMenu,
     processSearchClaimant,
     processBenefitOverview,
     processEditProfile,
@@ -335,4 +380,6 @@ module.exports = {
     processDeleteUser,
     processMakeAdmin,
     processRemoveAdmin,
+    processActivateUser,
+    processDeactivateUser,
 }

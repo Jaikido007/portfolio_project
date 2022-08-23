@@ -11,7 +11,7 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {{ govukPhaseBanner({
   tag: {
-    text: "alpha"
+    text: "beta"
   },
   html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
 }) }}
@@ -29,23 +29,24 @@
 
 {# LOGIN USERNAME #}
 
-<h1 class="govuk-heading-xl">Login</h1>
+<h1 class="govuk-heading-xl">Sign in to the Pension Payments account</h1>
 <form class="govuk-label--l" action=login method="POST">
-<h1 class="govuk-heading-l">Username</h1>
+<h1 class="govuk-heading-m">Username</h1>
   <input class="govuk-input govuk-input--width-20" type="text" name="username" placeholder="" value="{{username}}">
 </br>
 </br>
-<h1 class="govuk-heading-l">Password</h1>
+<h1 class="govuk-heading-m">Password</h1>
   <input class="govuk-input govuk-input--width-20" type="password" name="password" placeholder="">
 </br>
 </br>
 <button class="govuk-button" data-module="govuk-button" type="login">
-  Submit
+  Sign in
 </button>
 <button class="govuk-button" data-module="govuk-button" type="forgot" formaction="validateUsername">
   Forgot Password
 </button>
 </form>
+<a href="newUser">Click here to create new account</a>
 {% endblock %}
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}

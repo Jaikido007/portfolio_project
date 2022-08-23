@@ -65,6 +65,7 @@
       <th class="govuk-table__header">Username</th>
       <th class="govuk-table__header">Email</th>
       <th class="govuk-table__header">User type</th>
+            <th class="govuk-table__header">Is active</th>
     </tr>
 </thead>
 
@@ -77,6 +78,7 @@
       <td class="govuk-table__cell"> {{item.username}} </td>
       <td class="govuk-table__cell"> {{item.email}} </td>
       <td class="govuk-table__cell"> {{item.type}}</td>
+      <td class="govuk-table__cell"> {{item.is_active}}</td>
     </tr>
   </tbody>
   {% endfor %}
@@ -95,25 +97,42 @@
                     let currentRow=$(this).closest("tr");
                     let id = currentRow.find("td:eq(0)").html();
                     let isAdmin = currentRow.find("td:eq(3)").html();
+                    let isActive = currentRow.find("td:eq(4)").html();
+
                     alteredString = isAdmin.replace(/\s/g, "")
+                    alteredString2 = isActive.replace(/\s/g, "")
                     let user = currentRow.find("td:eq(1)").html();
                     document.getElementById('lblUsername').innerHTML = user;
                     hiddenDelID.setAttribute('value', id)
                     hiddenMakeAdminId.setAttribute('value', id)
                     hiddenRemoveAdminId.setAttribute('value', id)
+                    hiddenActivateUserId.setAttribute('value', id)
+                    hiddenDeactivateUserId.setAttribute('value', id)
 
                     if(alteredString === 'admin'){
-                        console.log('if')
                         $('#btmakeAdmin').prop('disabled', true);
                         $('#btremoveAdmin').prop('disabled', false);
                         $("#formMakeAdmin"). css("display", "none");
                         $("#formRemoveAdmin"). css("display", "block");
                     } else {
-                        console.log('else')
                         $('#btmakeAdmin').prop('disabled', false);
                         $('#btremoveAdmin').prop('disabled', true);
                         $("#formMakeAdmin"). css("display", "block");
                         $("#formRemoveAdmin"). css("display", "none");
+                    }
+                    console.log(alteredString2)
+                    if(alteredString2 === 'Y'){
+                        console.log('if')
+                        $('#btactivateUser').prop('disabled', true);
+                        $('#btdeactivateUser').prop('disabled', false);
+                        $("#formActivateUser"). css("display", "none");
+                        $("#formDeactivateUser"). css("display", "block");
+                    } else {
+                        console.log('else')
+                        $('#btactivateUser').prop('disabled', false);
+                        $('#btdeactivateUser').prop('disabled', true);
+                        $("#formActivateUser"). css("display", "block");
+                        $("#formDeactivateUser"). css("display", "none");
                     }
                 }
             });
@@ -140,7 +159,16 @@
     </form> &nbsp;
     <a href="newUser"> <button class="govuk-button" data-module="govuk-button" type="button" formaction="newUser">
       New user
-    </button></a>
+    </button></a> &nbsp;
+        <form action="activateUser" method="POST" id="formActivateUser">
+        <input type="hidden" name="hiddenActivateUserId" id="hiddenActivateUserId" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btactivateUser">Activate User</button>
+    </form> &nbsp;
+            <form action="deactivateUser" method="POST" id="formDeactivateUser">
+        <input type="hidden" name="hiddenDeactivateUserId" id="hiddenDeactivateUserId" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btdeactivateUser">Deactivate User</button>
+    </form> 
+    
 </table>
 
     </body>

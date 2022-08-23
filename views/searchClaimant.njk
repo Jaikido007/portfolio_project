@@ -34,24 +34,25 @@
 
   <h1 class="govuk-heading-xl">Search claimant</h1>
 
-  <p>{{message}}</p>
-
   <form class="govuk-label--l" action=securityLogin method="POST">
 
 <h1 class="govuk-heading-l">National Insurance Number</h1>
+
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{{ govukInput({
-  label: {
-    text: "National Insurance number"
-  },
-  hint: {
-    text: "It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’."
-  },
-  id: "nino",
-  name: "nino"
+<div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="nino">
+    National Insurance number
+  </label>
+  <div id="national-insurance-number-hint" class="govuk-hint">
+    It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+  </div>
+  <p id="national-insurance-number-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> {{message}}
+  </p>
+  <input class="govuk-input govuk-input--error" id="nino" name="nino" type="text" aria-describedby="national-insurance-number-hint national-insurance-number-error">
+</div>
 
-}) }}
 </br>
 </br>
 

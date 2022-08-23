@@ -16,24 +16,25 @@ const processLoginUser = (request, response) => {
 
             webDbController.getUsernameAndPassword({username})
             .then(result => {
-                let encryptedpw = result.rows[0].encrypted_password
-                checkEncryptedPassword({password, encryptedpw})
-                .then((result) => {
-                    if (result === true) {
-                        // SESSION VARIABLES TO SET UP
-                        response.render('usermenu')
-                    } else {
-                        response.render ('welcome')
-                        console.log(`ERROR, password doesn' match encrypted password`);
-                    }
-                })
-                .catch(error => {
-                    response.status(500).send(error);
-                    console.log(`ERROR, passwords don't match!`)
-                }); {
-
+                if (result.rows[0].is_active === 'Y') {
+                    let encryptedpw = result.rows[0].encrypted_password
+                    checkEncryptedPassword({password, encryptedpw})
+                    .then((result) => {
+                        if (result === true) {
+                            // SESSION VARIABLES TO SET UP
+                            response.render('usermenu')
+                        } else {
+                            response.render ('welcome')
+                            console.log(`ERROR, password doesn' match encrypted password`);
+                        }
+                    })
+                    .catch(error => {
+                        response.status(500).send(error);
+                        console.log(`ERROR, passwords don't match!`)
+                    }); 
                 }
-            })
+                }) 
+
                 .catch(() => response.status(500).send(`ERROR, couldn't retrieve username and password`));
             }})
             .catch(() => response.status(500).send(`ERROR, user doesn't exist in the database`));
@@ -228,6 +229,7 @@ const processPaymentHistory = (request, response) => {
 const processUserMaintenance = (request, response) => {
     webDbController.getSystemUserDetails()
     .then(result => {
+        console.log(result)
         response.render('userMaintenance', {'items':result.rows})
     }
     )
@@ -285,6 +287,32 @@ const processSystemUsers = (request, response) => {
 }) 
 }
 
+const processDeleteUser = (request, response) => {
+    let uid = request.body.hiddenDelID;
+    console.log(request.body)
+    console.log(uid)
+    webDbController.deleteUserFromDB(uid)
+    .then(() => processSystemUsers(request, response))
+    .catch(() => response.status(500).send('error'));
+}
+
+const processMakeAdmin = (request, response) => {
+    let uid = request.body.hiddenMakeAdminId;
+    console.log(uid)
+    webDbController.makeAdminUserinDB(uid)
+    .then(() => processSystemUsers(request, response))
+    .catch(() => response.status(500).send('error'));
+}
+
+const processRemoveAdmin = (request, response) => {
+    let uid = request.body.hiddenRemoveAdminId;
+    console.log(uid)
+    webDbController.removeAdminUserinDB(uid)
+    .then(() => processSystemUsers(request, response))
+    .catch(() => response.status(500).send('error'));
+}
+
+
 module.exports = {
     processLoginUser,
     processWelcomeUser,
@@ -304,4 +332,7 @@ module.exports = {
     processUserMaintenance,
     processNewUser,
     processSystemUsers,
+    processDeleteUser,
+    processMakeAdmin,
+    processRemoveAdmin,
 }

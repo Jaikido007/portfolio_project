@@ -4,7 +4,7 @@ const client = require('./db');
 const getUsernameAndPassword = ({username}) => {
     let tableName = 'system_users';
     return client.query(
-        `SELECT encrypted_password FROM ${tableName} WHERE username = '${username}'`,
+        `SELECT encrypted_password, is_active FROM ${tableName} WHERE username = '${username}'`,
     );
 }
 
@@ -28,7 +28,7 @@ const getSystemUserDetails = () => {
     let tableName = 'system_users';
     let tableName2 = 'user_types';
     return client.query(
-        `SELECT * FROM ${tableName}  
+        `SELECT ${tableName}.id, ${tableName}.username, ${tableName}.email, ${tableName2}.type FROM ${tableName}  
         LEFT JOIN ${tableName2}
         ON ${tableName}.user_type = ${tableName2}.id
         ORDER BY ${tableName}.id`
@@ -130,6 +130,29 @@ const verifySecurityDetails = (uid) => {
     );
 }
 
+const deleteUserFromDB = (uid) => {
+    let tableName = 'system_users';
+
+    return client.query(
+        `DELETE FROM ${tableName} WHERE id = ${uid}`
+    );
+}
+
+const makeAdminUserinDB = (uid) => {
+    let tableName = 'system_users';
+
+    return client.query(
+        `UPDATE ${tableName} SET user_type = 1 WHERE id = ${uid}`
+    );
+}
+
+const removeAdminUserinDB = (uid) => {
+    let tableName = 'system_users';
+
+    return client.query(
+        `UPDATE ${tableName} SET user_type = 2 WHERE id = ${uid}`
+    );
+}
 
 // MODULES
 
@@ -147,5 +170,8 @@ module.exports = {
     insertSystemUser,
     verifyNino,
     verifySecurityDetails,
+    deleteUserFromDB,
+    makeAdminUserinDB,
+    removeAdminUserinDB,
 
 }

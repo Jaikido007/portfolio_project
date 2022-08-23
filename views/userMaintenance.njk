@@ -40,41 +40,119 @@
 {# LOGIN USERNAME #}
 
 <h1 class="govuk-heading-xl">User maintenance</h1>
-<form class="govuk-label--l" action=login method="POST">
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-<table class="govuk-table" name="my_table">
-  <tr class="govuk-table__row">
-    <th class="govuk-table__header">Username</th>
-    <th class="govuk-table__header">Email</th>
-    <th class="govuk-table__header">User type</th>
-  </tr>
+{# ! HTML SECTION #}
+
+<html>
+    <head>
+        {# SCRIPT #}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script  src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    {# END OF SCRIPT #}
+</head>
+
+<body>
+
+<table class="govuk-table" name="mytable" id="mytable">
+  <thead  class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" style='display:none'>ID</th>
+      <th class="govuk-table__header">Username</th>
+      <th class="govuk-table__header">Email</th>
+      <th class="govuk-table__header">User type</th>
+    </tr>
+</thead>
 
   {# FOR LOOP #}
 
     {% for item in items %} 
-
-  <tr class="govuk-table__row">
-    <td class="govuk-table__cell"> {{item.username}} </td>
-    <td class="govuk-table__cell"> {{item.email}} </td>
-    <td class="govuk-table__cell"> {{item.type}}</td>
-  </tr>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" style='display:none'> {{item.id}}</td>
+      <td class="govuk-table__cell"> {{item.username}} </td>
+      <td class="govuk-table__cell"> {{item.email}} </td>
+      <td class="govuk-table__cell"> {{item.type}}</td>
+    </tr>
+  </tbody>
   {% endfor %}
 </table>
 
+    <script>
+        $(document).ready(function () {
+            var table = $('#mytable').DataTable();
+            $('#mytable tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                    let currentRow=$(this).closest("tr");
+                    let id = currentRow.find("td:eq(0)").html();
+                    let isAdmin = currentRow.find("td:eq(3)").html();
+                    alteredString = isAdmin.replace(/\s/g, "")
+                    let user = currentRow.find("td:eq(1)").html();
+                    document.getElementById('lblUsername').innerHTML = user;
+                    hiddenDelID.setAttribute('value', id)
+                    hiddenMakeAdminId.setAttribute('value', id)
+                    hiddenRemoveAdminId.setAttribute('value', id)
 
-  {# END OF FOR LOOP #}
+                    if(alteredString === 'admin'){
+                        console.log('if')
+                        $('#btmakeAdmin').prop('disabled', true);
+                        $('#btremoveAdmin').prop('disabled', false);
+                        $("#formMakeAdmin"). css("display", "none");
+                        $("#formRemoveAdmin"). css("display", "block");
+                    } else {
+                        console.log('else')
+                        $('#btmakeAdmin').prop('disabled', false);
+                        $('#btremoveAdmin').prop('disabled', true);
+                        $("#formMakeAdmin"). css("display", "block");
+                        $("#formRemoveAdmin"). css("display", "none");
+                    }
+                }
+            });
+        });
+    </script>
 
-<a href="newUser"> <button class="govuk-button" data-module="govuk-button" type="button" formaction="newUser">
-  New user
-</button></a>
+    <br>
+    <br>
+    <p class="govuk-body"> The selected user is currently: <label id="lblUsername"></label></p>
+    <p class="govuk-body">The options available to you are: </p>
 
-</form>
+<table>
+    <form action="deleteUser" method = "POST" id="formDeleteUser">
+        <input type="hidden" name="hiddenDelID" id="hiddenDelID" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btdeleteUser">Delete User</button>
+    </form> &nbsp;
+    <form action="makeAdmin" method="POST" id="formMakeAdmin">
+        <input type="hidden" name="hiddenMakeAdminId" id="hiddenMakeAdminId" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btmakeAdmin">Make Admin</button>
+    </form> &nbsp;
+    <form action="removeAdmin" method="POST" id="formRemoveAdmin">
+        <input type="hidden" name="hiddenRemoveAdminId" id="hiddenRemoveAdminId" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btremoveAdmin">Remove Admin</button>
+    </form> &nbsp;
+    <a href="newUser"> <button class="govuk-button" data-module="govuk-button" type="button" formaction="newUser">
+      New user
+    </button></a>
+</table>
+
+    </body>
+</html>
+
+{# ! END OF HTML SECTION #}
+
 {% endblock %}
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
   <script src="styles/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
+
 {% endblock %}

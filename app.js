@@ -7,7 +7,7 @@ const http = require('http');
 const {v4: uuidv4} = require('uuid');
 console.log(uuidv4());
 const chalk = require('chalk');
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 const webController = require('./webcontroller')
 
@@ -89,6 +89,10 @@ app.post('/newUser', webController.processNewUser);
 app.post('/validateUsername',  webController.validateUsername);
 app.post('/validateusername2', webController.validateUsername2);
 app.post('/changepw', webController.processChangePW); 
+
+app.post('/deleteUser', webController.processDeleteUser);
+app.post('/makeAdmin', webController.processMakeAdmin);
+app.post('/removeAdmin', webController.processRemoveAdmin);
 
 
 

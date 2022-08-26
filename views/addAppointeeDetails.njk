@@ -2,7 +2,6 @@
   {% block head %}
 <!--[if !IE 8]><!-->
     <link rel="stylesheet" type="text/css" href="styles/main.css">
-
 {% endblock %}
 
 {% block content %}
@@ -20,7 +19,7 @@
       href: "usermenu"
     },
     {
-      text: "Search claimant",
+      text: "Search for claimant",
       href: "searchClaimant"
     },
     {
@@ -28,12 +27,12 @@
       href: "securityLogin"
     },
       {
-      text: "Claimant details",
-      href: "claimantDetails"
+      text: "Appointee details",
+      href: "appointeeDetails"
     },
           {
-      text: "Change claimant details",
-      href: "addClaimantDetails"
+      text: "Change appointee details",
+      href: "addAppointeeDetails"
     }
   ]
 }) }}
@@ -44,12 +43,12 @@
     Contents
   </h2>
   <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+    <li class="govuk-tabs__list-item">
       <a class="govuk-tabs__tab" href="/claimantDetails">
         Claimant details
       </a>
     </li>
-    <li class="govuk-tabs__list-item">
+    <li class="govuk-tabs__list-item  govuk-tabs__list-item--selected">
       <a class="govuk-tabs__tab" href="/appointeeDetails">
         Appointee details
       </a>
@@ -70,62 +69,60 @@
       </a>
     </li>
   </ul>
-  <div class="govuk-tabs__panel" id="claimantDetails">
-    <h2 class="govuk-heading-l">Enter claimant details</h2>
+  <div class="govuk-tabs__panel" id="appointeeDetails">
+    <h2 class="govuk-heading-l">Enter appointee details</h2>
 
     {# ! Titles and Input #}
 
 <dl class="govuk-summary-list">
 
 
-  <div class="govuk-summary-list__row">
+    <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
       NI Number
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.nino}}
+      {{items.app_nino}}
     </dd>
   </div>
 
-
-
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-    <form action="updateClaimant" method="POST" id="formUpdateClaimant">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="title">
+    <form action="updateClaimant" method="POST" id="formUpdateAppointee">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_title">
           Title
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.title == '')  %} value="" {% elif(items.title !='')%} value="{{items.title}}" {% endif %} class="govuk-input" id="title" name="title" type="text">
+      <input {% if(items.app_title == '')  %} value="" {% elif(items.app_title !='')%} value="{{items.app_title}}" {% endif %} class="govuk-input" id="title" name="title" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="first_name">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_first_name">
           First name
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.first_name == '')  %} value="" {% elif(items.first_name !='')%} value="{{items.first_name}}" {% endif %}class="govuk-input" id="first_name" name="first_name" type="text">
+      <input {% if(items.app_first_name == '')  %} value="" {% elif(items.app_first_name !='')%} value="{{items.app_first_name}}" {% endif %}class="govuk-input" id="first_name" name="first_name" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1  class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="last_name">
+      <h1  class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_last_name">
           Last name
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.last_name == '')  %} value="" {% elif(items.last_name !='')%} value="{{items.last_name}}" {% endif %} class="govuk-input" id="last_name" name="last_name" type="text">
+      <input {% if(items.app_last_name == '')  %} value="" {% elif(items.app_last_name !='')%} value="{{items.app_last_name}}" {% endif %} class="govuk-input" id="last_name" name="last_name" type="text">
     </dd>
   </div>
 
@@ -140,79 +137,79 @@
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="address1">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_address1">
           Address 1
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.address1 == '')  %} value="" {% elif(items.address1 !='')%} value="{{items.address1}}" {% endif %}} class="govuk-input" id="address1" name="address1" type="text">
+      <input {% if(items.app_address1 == '')  %} value="" {% elif(items.app_address1 !='')%} value="{{items.app_address1}}" {% endif %} class="govuk-input" id="address1" name="address1" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="address2">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_address2">
           Address 2
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.address2 == '')  %} value="" {% elif(items.address2 !='')%} value="{{items.address2}}" {% endif %} class="govuk-input" id="address2" name="address2" type="text">
+      <input {% if(items.app_address2 == '')  %} value="" {% elif(items.app_address2 !='')%} value="{{items.app_address2}}"{% endif %} class="govuk-input" id="address2" name="address2" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="address3">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_address3">
           Address 3
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.address3 == '')  %} value="" {% elif(items.address3 !='')%} value="{{items.address3}}" {% endif %} class="govuk-input" id="address3" name="address3" type="text">
+      <input {% if(items.app_address3 == '')  %} value="" {% elif(items.app_address3 !='')%} value="{{items.app_address3}}" {% endif %} class="govuk-input" id="address3" name="address3" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="town">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_town">
           Town
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.town == '')  %} value="" {% elif(items.town !='')%} value="{{items.town}}" {% endif %} class="govuk-input" id="town" name="town" type="text">
+      <input {% if(items.app_town == '')  %} value="" {% elif(items.app_town !='')%} value="{{items.app_town}}" {% endif %} class="govuk-input" id="town" name="town" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="county">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_county">
           County
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input  {% if(items.county == '')  %} value="" {% elif(items.county !='')%} value="{{items.county}}" {% endif %}class="govuk-input" id="county" name="county" type="text">
+      <input  {% if(items.app_county == '')  %} value="" {% elif(items.app_county !='')%} value="{{items.app_county}}" {% endif %}class="govuk-input" id="county" name="county" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="postcode">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_postcode">
           Post code
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.postcode == '')  %} value="" {% elif(items.postcode !='')%} value="{{items.postcode}}" {% endif %} class="govuk-input" id="postcode" name="postcode" type="text">
+      <input  {% if(items.app_postcode == '')  %} value="" {% elif(items.app_postcode !='')%} value="{{items.app_postcode}}" {% endif %}class="govuk-input" id="postcode" name="postcode" type="text">
     </dd>
   </div>
 
@@ -242,46 +239,17 @@
     </dd>
   </div>
 
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Appointee
-    </dt>
-    <dd class="govuk-summary-list__value">
-      {{items.app_title}} {{items.app_first_name}} {{items.app_last_name}}
-    </dd>
-  </div>
 </dl>
 
-    <script>
-        $(document).ready(function () {
-          let nino = 'JW010203A'
-          console.log(nino) 
-
-          if(nino != ''){
-                  $('#btaddClaimant').prop('disabled', true);
-                  $('#btupdateClaimant').prop('disabled', false);
-                  $("#formAddClaimant"). css("display", "none");
-                  $("#formUpdateClaimant"). css("display", "block");
-              } else {
-                  $('#btAddClaimant').prop('disabled', false);
-                  $('#btUpdateClaimant').prop('disabled', true);
-                  $("#formAddClaimant"). css("display", "block");
-                  $("#formUpdateClaimant"). css("display", "none");
-                    }           
-        });
-    </script>
-
-<table>
-    {# <form action="addClaimant" method="POST" id="formAddClaimant"> #}
-        <input type="hidden" name="hiddenAddClaimant" id="hiddenAddClaimant" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddClaimant" formaction="addClaimant">Add Claimant</button>
+    {# <form action="addClaimant" method="POST" id="formAddAppointee"> #}
+        <input type="hidden" name="hiddenAddAppointee" id="hiddenAddAppointee" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddAppointee" formaction="addAppointee">Add Appointee</button>
     {# </form>  #}
     &nbsp;
 
-        <input type="hidden" name="hiddenUpdateClaimant" id="hiddenUpdateClaimant" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateClaimant">Update Claimant</button>
+        <input type="hidden" name="hiddenUpdateAppointee" id="hiddenUpdateAppointee" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateAppointee">Update Appointee</button>
     </form> 
-  </table>
 
 {% endblock %}
 {% block bodyEnd %}

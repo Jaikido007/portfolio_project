@@ -65,7 +65,7 @@
       <th class="govuk-table__header">Username</th>
       <th class="govuk-table__header">Email</th>
       <th class="govuk-table__header">User type</th>
-            <th class="govuk-table__header">Is active</th>
+            <th class="govuk-table__header">Active user</th>
     </tr>
 </thead>
 
@@ -120,15 +120,12 @@
                         $("#formMakeAdmin"). css("display", "block");
                         $("#formRemoveAdmin"). css("display", "none");
                     }
-                    console.log(alteredString2)
                     if(alteredString2 === 'Y'){
-                        console.log('if')
                         $('#btactivateUser').prop('disabled', true);
                         $('#btdeactivateUser').prop('disabled', false);
                         $("#formActivateUser"). css("display", "none");
                         $("#formDeactivateUser"). css("display", "block");
                     } else {
-                        console.log('else')
                         $('#btactivateUser').prop('disabled', false);
                         $('#btdeactivateUser').prop('disabled', true);
                         $("#formActivateUser"). css("display", "block");
@@ -145,6 +142,9 @@
     <p class="govuk-body">The options available to you are: </p>
 
 <table>
+      <a href="newUser"> <button class="govuk-button" data-module="govuk-button" type="button" formaction="newUser">
+      New user
+    </button></a> &nbsp;
     <form action="deleteUser" method = "POST" id="formDeleteUser">
         <input type="hidden" name="hiddenDelID" id="hiddenDelID" />
         <button class="govuk-button" data-module="govuk-button" type="submit" id="btdeleteUser">Delete User</button>
@@ -157,9 +157,6 @@
         <input type="hidden" name="hiddenRemoveAdminId" id="hiddenRemoveAdminId" />
         <button class="govuk-button" data-module="govuk-button" type="submit" id="btremoveAdmin">Remove Admin</button>
     </form> &nbsp;
-    <a href="newUser"> <button class="govuk-button" data-module="govuk-button" type="button" formaction="newUser">
-      New user
-    </button></a> &nbsp;
         <form action="activateUser" method="POST" id="formActivateUser">
         <input type="hidden" name="hiddenActivateUserId" id="hiddenActivateUserId" />
         <button class="govuk-button" data-module="govuk-button" type="submit" id="btactivateUser">Activate User</button>

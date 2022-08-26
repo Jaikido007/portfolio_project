@@ -29,6 +29,10 @@
       {
       text: "Pension details",
       href: "pensionDetails"
+    },
+          {
+      text: "Change pension details",
+      href: "addPensionDetails"
     }
   ]
 }) }}
@@ -66,52 +70,75 @@
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="bankDetails">
-    <h2 class="govuk-heading-l">Pension details</h2>
+    <h2 class="govuk-heading-l">Add pension details</h2>
 
 <dl class="govuk-summary-list">
 
-  <div class="govuk-summary-list__row">
+    <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
+          <form action="updatePensionDetails" method="POST" id="formUpdatePensionDetails">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="pension_type">
       Pension type
+        </label>
+        </h1>
     </dt>
+
     <dd class="govuk-summary-list__value">
-      {{items.pension_type}}
+      <input  {% if(items.pension_type == '')  %} value="" {% elif(items.pension_type !='')%} value="{{items.pension_type}}" {% endif %} class="govuk-input" id="pension_type" name="pension_type" type="text">
     </dd>
-    <dd class="govuk-summary-list__actions">
-      <a class="govuk-link" href="addPensionDetails">
-        Change<span class="govuk-visually-hidden"> Pension type</span>
-      </a>
-    </dd>
+
+    <div class="govuk-form-group">
+  <label class="govuk-label" for="sort">
+    Sort by
+  </label>
+  <select class="govuk-select" id="sort" name="sort">
+    <option value="{{items.id}}" selected>{{items.pension_type}}</option>
+    {% for penType in penTypes %} 
+    <option value="{{penType.id}}">{{penType.pension_type}}</option>
+    {% endfor %}
+  </select>
+</div>
+
   </div>
+
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="pt_amount">
       Amount
+        </label>
+        </h1>
     </dt>
+
     <dd class="govuk-summary-list__value">
-      {{items.pt_amount}}
-    </dd>
-    <dd class="govuk-summary-list__actions">
-      <a class="govuk-link" href="addPensionDetails">
-        Change<span class="govuk-visually-hidden"> Amount</span>
-      </a>
+      <input  {% if(items.pt_amount == '')  %} value="" {% elif(items.pt_amount !='')%} value="{{items.pt_amount}}" {% endif %} class="govuk-input" id="pt_amount" name="pt_amount" type="text">
     </dd>
   </div>
-  <div class="govuk-summary-list__row">
+
+    <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="frequency">
       Frequency
+        </label>
+        </h1>
     </dt>
+
     <dd class="govuk-summary-list__value">
-      {{items.frequency}}
-    </dd>
-    <dd class="govuk-summary-list__actions">
-      <a class="govuk-link" href="addPensionDetails">
-        Change<span class="govuk-visually-hidden"> Frequency</span>
-      </a>
+      <input  {% if(items.frequency == '')  %} value="" {% elif(items.frequency !='')%} value="{{items.frequency}}" {% endif %} class="govuk-input" id="frequency" name="frequency" type="text">
     </dd>
   </div>
 
 
-</dl>
+<table>
+    {# <form action="addPensionDetails" method="POST" id="formAddPensionDetails"> #}
+        <input type="hidden" name="hiddenAddPensionDetails" id="hiddenAddPensionDetails" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddPensionDetails" formaction="addAppointee">Add Pension Details</button>
+    {# </form>  #}
+    &nbsp;
+
+        <input type="hidden" name="hiddenUpdatePensionDetails" id="hiddenUpdatePensionDetails" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdatePensionDetails">Update Pension Details</button>
+    </form> </dl>
+  </table>
 
 {% endblock %}
 {% block bodyEnd %}

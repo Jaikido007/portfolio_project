@@ -25,7 +25,7 @@
   ]
 }) }}
 
-  <h1 class="govuk-heading-xl">Edit profile</h1>
+  <h1 class="govuk-heading-xl">Change profile details</h1>
     {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {{ govukSummaryList({
@@ -36,15 +36,6 @@
       },
       value: {
         text: items.username
-      },
-      actions: {
-        items: [
-          {
-            href: "updateEditProfile?field=username",
-            text: "Change",
-            visuallyHiddenText: "username"
-          }
-        ]
       }
     },
 
@@ -54,15 +45,7 @@
       },
       value: {
         text: items.email
-      },
-      actions: {
-        items: [
-          {
-            href: "updateEditProfile?field=email",
-            text: "Change",
-            visuallyHiddenText: "email"
-          }
-        ]
+      }
       }
     },
 
@@ -72,15 +55,6 @@
       },
       value: {
         text: '********'
-      },
-      actions: {
-        items: [
-          {
-            href: "#",
-            text: "Change",
-            visuallyHiddenText: "password"
-          }
-        ]
       }
     },
 

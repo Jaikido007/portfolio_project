@@ -5,7 +5,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const http = require('http');
 const {v4: uuidv4} = require('uuid');
-console.log(uuidv4());
 const chalk = require('chalk');
 const PORT = process.env.PORT;
 const sessions = require('express-session');
@@ -42,14 +41,22 @@ app.get('/searchClaimant', (request, response) => {
     response.render('searchClaimant');
 });
 
-app.get('/addClaimantDetails', (request, response) => {
-    response.render('addClaimantDetails');
+app.get('/changeProfile', (request, response) => {
+    response.render('changeProfile');
 });
 
 app.get('/claimantDetails', webController.processClaimantDetails);
+app.get('/addClaimantDetails', webController.processAddEditClaimant);
+
 app.get('/appointeeDetails', webController.processAppointeeDetails);
+app.get('/addAppointeeDetails', webController.processAddEditAppointee);
+
 app.get('/bankDetails', webController.processBankDetails);
+app.get('/addBankDetails', webController.processAddEditBankDetails);
+
 app.get('/pensionDetails', webController.processPensionDetails);
+app.get('/addPensionDetails', webController.processAddEditPensionDetails);
+
 app.get('/paymentHistory', webController.processPaymentHistory);
 
 app.get('/userMaintenance', webController.processSystemUsers);
@@ -112,6 +119,15 @@ app.post('/makeAdmin', webController.processMakeAdmin);
 app.post('/removeAdmin', webController.processRemoveAdmin);
 app.post('/activateUser', webController.processActivateUser);
 app.post('/deactivateUser', webController.processDeactivateUser);
+app.post('/addClaimant', webController.processAddClaimant);
+app.post('/updateClaimant', webController.processUpdateClaimant);
+app.post('/addAppointee', webController.processAddAppointee);
+app.post('/updateAppointee', webController.processUpdateAppointee);
+app.post('/addBankDetails', webController.processAddBankDetails);
+app.post('/updateBankDetails', webController.processUpdateBankDetails);
+app.post('/addPensionDetails', webController.processAddPensionDetails);
+app.post('/updatePensionDetails', webController.processUpdatePensionDetails);
+
 
 
 

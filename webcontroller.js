@@ -11,7 +11,7 @@ const processLoginUser = (request, response) => {
     .then(result => {
         if (result.rowCount == 0) {
             // FIX LATER
-            console.log(`ERROR, user doesn't exist in the database`);
+            console.log(`${chalk.red ("User doesn't exist in the database ")}`)
 
         } else {
 
@@ -28,12 +28,12 @@ const processLoginUser = (request, response) => {
                             response.render('usermenu')
                         } else {
                             response.render ('welcome')
-                            console.log(`ERROR, password doesn' match encrypted password`);
+                            console.log(`${chalk.red ("Password doesn't match encrypted password ")}`)
                         }
                     })
                     .catch(error => {
                         response.status(500).send(error);
-                        console.log(`ERROR, passwords don't match!`)
+                        console.log(`${chalk.red ("Error: Passwords don't match " + error)}`)
                     }); 
                 }
                 }) 
@@ -56,14 +56,12 @@ const validateUsername2 = (request, response) => {
 }
 
 const validateUsername = (request, response) => {
-
     response.render('validateUsername')
 }
 
 const processChangePW = (request, response) => {
     let newPW = request.body.password2;
     let username = request.body.username
-    console.log(newPW + " " + username)
     webDbController.changeUserPW(username, newPW)
     .then(result => {
             response.render('usermenu', {username: username})
@@ -71,7 +69,7 @@ const processChangePW = (request, response) => {
     )
     .catch(error => {
         // response.render('register', {message: dbError})
-        console.log(`${chalk.red ("Error: processChangePW")}`)
+        console.log(`${chalk.red ("Error: processChangePW " + error)}`)
     })  
 }
 
@@ -86,23 +84,19 @@ const processSearchClaimant = (request, response) => {
     let newString = tidyString(enteredNino);
     session = request.session
     session.claimantNino = newString
-    console.log(newString)
-    console.log(enteredNino)
     webDbController.verifyNino(newString)
     .then(result => {
         if(result.rowCount == 0) {
-            console.log('No such NINO found!')
             let message = ('Could not verify National Insurance Number.')
             response.render('searchClaimant', {message});
         } else {
-            console.log(result)
             if(result.rows[0].nino === newString) {
                 webDbController.getSecurityQuestions(result.rows[0].nino)
                 .then (result => {
                     response.render('securityLogin', {items:result.rows[0]})
                 })
                 .catch(error => {
-                    console.log(`${chalk.red ("Error: processSearchClaimant " + error)}`)
+                    console.log(`${chalk.red ("Error: processSearchClaimant 1st catch " + error)}`)
                 })  
             } else {
                 let message = ('Entered NINO does not match!')
@@ -112,7 +106,7 @@ const processSearchClaimant = (request, response) => {
         }
     })
     .catch(error => {
-        console.log(`${chalk.red ("Error: processSearchClaimant " + error)}`)
+        console.log(`${chalk.red ("Error: processSearchClaimant 2nd catch " + error)}`)
     })  
 }
 
@@ -121,13 +115,10 @@ const tidyString = (nino => {
     alteredString = nino.replace(/\s/g, "")
     alteredString = alteredString.replace(/\-/g, "")
     alteredString = alteredString.toUpperCase();
-    console.log(alteredString)
-
     return alteredString;
 })
 
 const processBenefitOverview = (request, response) => {
-    console.log("Benefit overview")
     response.render('benefitOverview')
 }
 
@@ -136,9 +127,8 @@ const processEditProfile = (request, response) => {
     if(session.username == null){
         response.render('welcome')
     } else {
-        console.log('processEditProfile')
+        console.log(`${chalk.red ("Error: processEditProfile " + error)}`)
         let username = session.username
-        console.log(username)
         webDbController.getSystemUserDetails(username)
         .then(result => {
             response.render('editProfile', {'items':result.rows[0]})
@@ -155,18 +145,13 @@ const processUpdateEditProfile = (request, response) => {
 }
 
 const processSecurityClearence = (request, response) => {
-    console.log("Security clearence")
-    console.log(request.body)
     let dobNum = verifyDOB(request.body['dob-day'], request.body['dob-month'], request.body['dob-year'])
     session = request.session
     let nino = session.claimantNino
     webDbController.verifySecurityDetails(nino)
     .then (result => {
-        console.log(dobNum + '------' + result.rows[0].dob);
-        console.log(request.body.sec1 + '--------' + result.rows[0].sec_answer1)
-        console.log(request.body.sec2 + '--------' + result.rows[0].sec_answer2)
         if (dobNum != result.rows[0].dob || request.body.sec1 != result.rows[0].sec_answer1 || request.body.sec2 != result.rows[0].sec_answer2) {
-            console.log('Its all gone to pot')
+            console.log(`${chalk.red ("Error: You've probably mistyped the password Jay ")}`)
         } else {
             processClaimantDetails(request, response);
         }
@@ -184,7 +169,7 @@ const processClaimantDetails = (request, response) => {
     let nino = session.claimantNino
     webDbController.getClaimantUserDetails(nino)
     .then(result => {
-        console.log(result.rows[0])
+        session.claimantID = result.rows[0].id
         response.render('claimantDetails', {'items':result.rows[0]})
     }
     )
@@ -221,7 +206,7 @@ const processBankDetails = (request, response) => {
     }
     )
 .catch(error => {
-    console.log(`${chalk.red ("Error: processBankDetails " + error)}`)
+    console.log(`${chalk.red}Error: processBankDetails ` + error)
 })  
 }
 
@@ -254,7 +239,6 @@ const processPaymentHistory = (request, response) => {
 const processUserMaintenance = (request, response) => {
     webDbController.getAllSystemUserDetails()
     .then(result => {
-        console.log(result)
         response.render('userMaintenance', {'items':result.rows})
     }
     )
@@ -270,7 +254,6 @@ const processNewUser = (request, response) => {
     encryptedpw = ''
     usertypeno = 0
     usertype = request.body.usertype
-    console.log(usertype)
     switch(usertype) {
         case 'admin':
         usertypeno = 1
@@ -284,7 +267,6 @@ const processNewUser = (request, response) => {
     encryptPassword(password)
     .then (result => {
         encryptedpw = result
-        console.log(encryptedpw + ' ' + usertypeno)
         webDbController.insertSystemUser({username, email, encryptedpw, usertypeno})
         .then (() => {
             webDbController.getSystemUserDetails()
@@ -293,16 +275,15 @@ const processNewUser = (request, response) => {
             })
         })
         .catch (error => {
-            console.log(error)
+            console.log(`${chalk.red} ERROR: processNewUser 1st catch ` + error)
         })
     })
     .catch(error => {
-        console.log(error)
+        console.log(`${chalk.red} Error: processNewUser 2nd catch` + error)
     })
 }
 
 const processSystemUsers = (request, response) => {
-    console.log('I AM HERE!')
     webDbController.getAllSystemUserDetails()
     .then(result => {
         response.render('userMaintenance', {'items':result.rows})
@@ -313,10 +294,10 @@ const processSystemUsers = (request, response) => {
 }) 
 }
 
+// * PROCESS BUTTONS
+
 const processDeleteUser = (request, response) => {
     let uid = request.body.hiddenDelID;
-    console.log(request.body)
-    console.log(uid)
     webDbController.deleteUserFromDB(uid)
     .then(() => processSystemUsers(request, response))
     .catch(() => response.status(500).send('error'));
@@ -324,7 +305,6 @@ const processDeleteUser = (request, response) => {
 
 const processMakeAdmin = (request, response) => {
     let uid = request.body.hiddenMakeAdminId;
-    console.log(uid)
     webDbController.makeAdminUserinDB(uid)
     .then(() => processSystemUsers(request, response))
     .catch(() => response.status(500).send('error'));
@@ -332,7 +312,6 @@ const processMakeAdmin = (request, response) => {
 
 const processRemoveAdmin = (request, response) => {
     let uid = request.body.hiddenRemoveAdminId;
-    console.log(uid)
     webDbController.removeAdminUserinDB(uid)
     .then(() => processSystemUsers(request, response))
     .catch(() => response.status(500).send('error'));
@@ -340,7 +319,6 @@ const processRemoveAdmin = (request, response) => {
 
 const processActivateUser = (request, response) => {
     let uid = request.body.hiddenActivateUserId;
-    console.log(uid)
     webDbController.activateUserinDB(uid)
     .then(() => processSystemUsers(request, response))
     .catch(() => response.status(500).send('error'));
@@ -348,10 +326,140 @@ const processActivateUser = (request, response) => {
 
 const processDeactivateUser = (request, response) => {
     let uid = request.body.hiddenDeactivateUserId;
-    console.log(uid)
     webDbController.deactivateUserinDB(uid)
     .then(() => processSystemUsers(request, response))
     .catch(() => response.status(500).send('error'));
+}
+
+const processAddClaimant = (request, response) => {
+    console.log('processAddClaimant')
+
+}
+
+const processUpdateClaimant = (request, response) => {
+    let session = request.session
+    let nino = session.claimantNino
+    webDbController.updateClaimantInDB(nino, request.body)
+    .then(result => {
+        processClaimantDetails(request, response);
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processUpdateClaimant " + error)}`)
+    }) 
+}
+
+const processAddAppointee = (request, response) => {
+    console.log('processAddAppointee')
+
+}
+
+const processUpdateAppointee = (request, response) => {
+    let session = request.session
+    let nino = session.claimantNino
+    webDbController.updateAppointeeInDB(nino, request.body)
+    .then(result => {
+        processAppointeeDetails(request, response);
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processUpdateAppointee " + error)}`)
+    }) 
+}
+
+const processAddBankDetails = (request, response) => {
+    console.log('processAddBankDetails')
+
+}
+
+const processUpdateBankDetails = (request, response) => {
+    let session = request.session
+    let clid = session.claimantID
+    console.log(request.body)
+    webDbController.updateBankDetailsInDB(clid, request.body)
+    .then(result => {
+        processBankDetails(request, response);
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processUpdateBankDetails " + error)}`)
+    }) 
+}
+
+const processAddPensionDetails = (request, response) => {
+    console.log('processAddPensionDetails')
+
+}
+
+const processUpdatePensionDetails = (request, response) => {
+    let session = request.session
+    let nino = session.claimantNino
+    console.log(request.body)
+    // webDbController.updatePensionDetailsInDB(nino, request.body)
+    .then(result => {
+        // processPensionDetails(request, response);
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processUpdatePensionDetails " + error)}`)
+    }) 
+}
+
+
+// * PROCESS ADD EDIT SECTION
+
+const processAddEditClaimant = (request, response) => {
+    let session = request.session
+    if(session.claimantNino == null) {
+        response.render('addClaimantDetails', {items: []})
+    } else {
+        webDbController.getClaimantUserDetails(session.claimantNino)
+        .then(result => {
+            response.render('addClaimantDetails', {items: result.rows[0]})
+        })
+    }
+}
+
+const processAddEditAppointee = (request, response) => {
+    let session = request.session
+    if(session.claimantNino == null) {
+        response.render('addAppointeeDetails', {items: []})
+    } else {
+        webDbController.getAppointeeUserDetails(session.claimantNino)
+        .then(result => {
+            response.render('addAppointeeDetails', {items: result.rows[0]})
+        })
+    }
+}
+
+const processAddEditBankDetails = (request, response) => {
+    let session = request.session
+    if(session.claimantNino == null) {
+        response.render('addBankDetails', {items: []})
+    } else {
+        webDbController.getBankUserDetails(session.claimantNino)
+        .then(result => {
+            response.render('addBankDetails', {items: result.rows[0]})
+        })
+    }
+}
+
+const processAddEditPensionDetails = (request, response) => {
+    let session = request.session
+    if(session.claimantNino == null) {
+        response.render('addPensionDetails', {items: []})
+    } else {
+        webDbController. getPensionUserDetails(session.claimantNino)
+        .then(result => {
+            let penDetails = result
+            webDbController.getPensionTypes()
+            .then(result => {
+                response.render('addPensionDetails', {items: penDetails.rows[0], penTypes:result.rows})
+            })
+            .catch(error => {
+                console.log(`${chalk.red ("Error: getPensionTypes " + error)}`)
+            }) 
+        })
+        .catch(error => {
+            console.log(`${chalk.red ("Error: getPensionUserDetails " + error)}`)
+        }) 
+    }
 }
 
 
@@ -382,4 +490,16 @@ module.exports = {
     processRemoveAdmin,
     processActivateUser,
     processDeactivateUser,
+    processAddClaimant,
+    processUpdateClaimant,
+    processAddAppointee,
+    processUpdateAppointee,
+    processAddBankDetails,
+    processUpdateBankDetails,
+    processAddPensionDetails,
+    processUpdatePensionDetails,
+    processAddEditClaimant,
+    processAddEditAppointee,
+    processAddEditBankDetails,
+    processAddEditPensionDetails,
 }

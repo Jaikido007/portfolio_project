@@ -90,12 +90,12 @@ const getPensionUserDetails = (nino) => {
     let tableName6 = 'pension_types';
 
     return client.query(
-        `SELECT * FROM ${tableName}  
-        LEFT JOIN ${tableName5}
-        ON ${tableName}.id = ${tableName5}.id
-        LEFT JOIN ${tableName6}
-        ON ${tableName}.id = ${tableName6}.id
-        WHERE ${tableName}.nino = '${nino}'`,
+        `SELECT pfd.frequency, pt.pension_type, pt.id, pt.pt_amount FROM ${tableName} AS cl 
+        LEFT JOIN ${tableName5} AS pfd
+        ON cl.id = pfd.id
+        LEFT JOIN ${tableName6} AS pt
+        ON cl.id = pt.id
+        WHERE cl.nino = '${nino}'`,
     );
 }
 
@@ -200,6 +200,66 @@ const getSecurityQuestions = (nino) => {
     )
 }
 
+const updateClaimantInDB = (nino, abc) => {
+    let tableName = 'claimants';
+    return client.query(
+        `UPDATE ${tableName} SET 
+            title = '${abc.title}', 
+            first_name = '${abc.first_name}', 
+            last_name = '${abc.last_name}', 
+            address1 = '${abc.address1}', 
+            address2 = '${abc.address2}', 
+            address3 = '${abc.address3}', 
+            town = '${abc.town}', 
+            county = '${abc.county}', 
+            postcode = '${abc.postcode}'
+            WHERE nino = '${nino}'`
+    );
+}
+
+const updateAppointeeInDB = (nino, abc) => {
+    let tableName = 'appointee';
+    return client.query(
+        `UPDATE ${tableName} SET 
+            title = '${abc.app_title}', 
+            first_name = '${abc.app_first_name}', 
+            last_name = '${abc.app_last_name}', 
+            address1 = '${abc.app_address1}', 
+            address2 = '${abc.app_address2}', 
+            address3 = '${abc.app_address3}', 
+            town = '${abc.app_town}', 
+            county = '${abc.app_county}', 
+            postcode = '${abc.app_postcode}'
+            WHERE nino = '${nino}'`
+    );
+}
+
+const updateBankDetailsInDB = (clid, abc) => {
+    let tableName3 = 'payment_bank_details'
+    let query =         `UPDATE ${tableName3} SET 
+    bank_name = '${abc.bank_name}', 
+    account_no = '${abc.account_no}', 
+    sort_code = ${abc.sort_code}, 
+    WHERE customer_id = ${clid}`
+    console.log(query)
+    return client.query(
+        `UPDATE ${tableName3} SET 
+            bank_name = '${abc.bank_name}', 
+            account_no = '${abc.account_no}', 
+            sort_code = ${abc.sort_code} 
+            WHERE customer_id = ${clid}`
+    );
+}
+
+const getPensionTypes = () => {
+    let tableName = 'pension_types'
+    return client.query(
+        `SELECT id, pension_type FROM ${tableName}
+        WHERE is_active = 'Y'`
+    )
+
+}
+
 // MODULES
 
 module.exports = {
@@ -223,5 +283,10 @@ module.exports = {
     activateUserinDB,
     deactivateUserinDB,
     getSecurityQuestions,
+    updateClaimantInDB,
+    updateAppointeeInDB,
+    updateBankDetailsInDB,
+    // updatePensionDetailsInDB,
+    getPensionTypes,
 
 }

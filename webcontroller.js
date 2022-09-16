@@ -127,7 +127,7 @@ const processEditProfile = (request, response) => {
     if(session.username == null){
         response.render('welcome')
     } else {
-        console.log(`${chalk.red ("Error: processEditProfile " + error)}`)
+        console.log(`${chalk.red ("Error: processEditProfile ")}`)
         let username = session.username
         webDbController.getSystemUserDetails(username)
         .then(result => {
@@ -392,9 +392,9 @@ const processUpdatePensionDetails = (request, response) => {
     let session = request.session
     let nino = session.claimantNino
     console.log(request.body)
-    // webDbController.updatePensionDetailsInDB(nino, request.body)
+    webDbController.updatePensionDetailsInDB(1, request.body)
     .then(result => {
-        // processPensionDetails(request, response);
+        processPensionDetails(request, response);
     })
     .catch(error => {
         console.log(`${chalk.red ("Error: processUpdatePensionDetails " + error)}`)
@@ -450,7 +450,15 @@ const processAddEditPensionDetails = (request, response) => {
             let penDetails = result
             webDbController.getPensionTypes()
             .then(result => {
-                response.render('addPensionDetails', {items: penDetails.rows[0], penTypes:result.rows})
+                let penTypes = result;
+                webDbController.getPensionFrequency()
+                .then(result => {
+                    console.log(penDetails.rows[0])
+                    response.render('addPensionDetails', {items: penDetails.rows[0], penTypes:penTypes.rows, penFreqs:result.rows})
+                })
+                .catch(error => {
+                    console.log(`${chalk.red ("Error: getPensionFrequency " + error)}`)
+                }) 
             })
             .catch(error => {
                 console.log(`${chalk.red ("Error: getPensionTypes " + error)}`)

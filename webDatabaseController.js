@@ -86,16 +86,27 @@ const getBankUserDetails = (nino) => {
 
 const getPensionUserDetails = (nino) => {
     let tableName = 'claimants';
+    let tableName2 = 'claimant_pension_details';
     let tableName5 = 'pension_frequency_details';
     let tableName6 = 'pension_types';
 
+    let bollocks =         `SELECT pfd.frequency, pt.pension_type, pt.id AS pentypeid, pfd.id AS penfreqid, pt.pt_amount FROM ${tableName} AS cl 
+    LEFT JOIN ${tableName5} AS pfd
+    ON cl.id = pfd.id
+    LEFT JOIN ${tableName6} AS pt
+    ON cl.id = pt.id
+    WHERE cl.nino = '${nino}'`
+    console.log(bollocks)
+
     return client.query(
-        `SELECT pfd.frequency, pt.pension_type, pt.id, pt.pt_amount FROM ${tableName} AS cl 
+        `SELECT cpd.pension_amount, cpd.pension_frequency AS penfreqid,  cpd.pension_type_id AS pentypeid, pt.pension_type, pfd.frequency FROM ${tableName} AS cl 
+        LEFT JOIN ${tableName2} AS cpd
+        ON cl.id = cpd.claimant_id
         LEFT JOIN ${tableName5} AS pfd
-        ON cl.id = pfd.id
+        ON cpd.pension_frequency = pfd.id
         LEFT JOIN ${tableName6} AS pt
-        ON cl.id = pt.id
-        WHERE cl.nino = '${nino}'`,
+        ON cpd.pension_type_id = pt.id
+        WHERE cl.nino = '${nino}'`
     );
 }
 
@@ -251,10 +262,36 @@ const updateBankDetailsInDB = (clid, abc) => {
     );
 }
 
+const updatePensionDetailsInDB = (clid, abc) => {
+    let tableName3 = 'claimant_pension_details'
+    let bollocks = `UPDATE ${tableName3} SET 
+    pension_type_id = ${abc.sort}, 
+    pension_amount = ${abc.pension_amount}, 
+    pension_frequency = ${abc.frequency}
+    WHERE claimant_id = '${clid}'`
+    console.log(bollocks)
+    return client.query(
+        `UPDATE ${tableName3} SET 
+        pension_type_id = ${abc.sort}, 
+        pension_amount = ${abc.pension_amount}, 
+        pension_frequency = ${abc.frequency}
+        WHERE claimant_id = '${clid}'`
+    );
+}
+
 const getPensionTypes = () => {
     let tableName = 'pension_types'
     return client.query(
         `SELECT id, pension_type FROM ${tableName}
+        WHERE is_active = 'Y'`
+    )
+
+}
+
+const getPensionFrequency = () => {
+    let tableName = 'pension_frequency_details'
+    return client.query(
+        `SELECT id, frequency FROM ${tableName}
         WHERE is_active = 'Y'`
     )
 
@@ -286,7 +323,8 @@ module.exports = {
     updateClaimantInDB,
     updateAppointeeInDB,
     updateBankDetailsInDB,
-    // updatePensionDetailsInDB,
+    updatePensionDetailsInDB,
     getPensionTypes,
+    getPensionFrequency,
 
 }

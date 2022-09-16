@@ -135,6 +135,6 @@ app.post('/updatePensionDetails', webController.processUpdatePensionDetails);
 
 // ! APP.LISTEN SECTION
 
-app.listen(8001, function() {
+app.listen(8000, function() {
     console.log(`Running on ${chalk.blue("port:")} ${chalk.yellow(PORT)}`);
 })

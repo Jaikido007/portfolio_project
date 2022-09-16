@@ -83,16 +83,14 @@
         </h1>
     </dt>
 
-    <dd class="govuk-summary-list__value">
+    {# <dd class="govuk-summary-list__value">
       <input  {% if(items.pension_type == '')  %} value="" {% elif(items.pension_type !='')%} value="{{items.pension_type}}" {% endif %} class="govuk-input" id="pension_type" name="pension_type" type="text">
-    </dd>
+    </dd> #}
 
     <div class="govuk-form-group">
-  <label class="govuk-label" for="sort">
-    Sort by
-  </label>
+
   <select class="govuk-select" id="sort" name="sort">
-    <option value="{{items.id}}" selected>{{items.pension_type}}</option>
+    <option value="{{items.pentypeid}}" selected>{{items.pension_type}}</option>
     {% for penType in penTypes %} 
     <option value="{{penType.id}}">{{penType.pension_type}}</option>
     {% endfor %}
@@ -103,14 +101,14 @@
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="pt_amount">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="pension_amount">
       Amount
         </label>
         </h1>
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input  {% if(items.pt_amount == '')  %} value="" {% elif(items.pt_amount !='')%} value="{{items.pt_amount}}" {% endif %} class="govuk-input" id="pt_amount" name="pt_amount" type="text">
+      <input  {% if(items.pension_amount == '')  %} value="" {% elif(items.pension_amount !='')%} value="{{items.pension_amount}}" {% endif %} class="govuk-input" id="pension_amount" name="pension_amount" type="text">
     </dd>
   </div>
 
@@ -122,17 +120,20 @@
         </h1>
     </dt>
 
-    <dd class="govuk-summary-list__value">
-      <input  {% if(items.frequency == '')  %} value="" {% elif(items.frequency !='')%} value="{{items.frequency}}" {% endif %} class="govuk-input" id="frequency" name="frequency" type="text">
-    </dd>
+    <select class="govuk-select" id="frequency" name="frequency">
+    <option value="{{items.penfreqid}}" selected>{{items.frequency}}</option>
+    {% for penFreq in penFreqs %} 
+    <option value="{{penFreq.id}}">{{penFreq.frequency}}</option>
+    {% endfor %}
+  </select>
+
   </div>
 
 
 <table>
-    {# <form action="addPensionDetails" method="POST" id="formAddPensionDetails"> #}
+    <form action="addPensionDetails" method="POST" id="formAddPensionDetails">
         <input type="hidden" name="hiddenAddPensionDetails" id="hiddenAddPensionDetails" />
         <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddPensionDetails" formaction="addAppointee">Add Pension Details</button>
-    {# </form>  #}
     &nbsp;
 
         <input type="hidden" name="hiddenUpdatePensionDetails" id="hiddenUpdatePensionDetails" />

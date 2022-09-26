@@ -1,0 +1,21 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Fake email</h1>
+<form class="govuk-label--l" action=validateUsername2 method="POST">
+<h1 class="govuk-heading-l">Fake email</h1>
+  <label> 
+    localhost:8000/pwmenu?id={{items.password_guid}}
+  </label>
+</form>
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

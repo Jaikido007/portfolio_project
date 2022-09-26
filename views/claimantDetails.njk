@@ -126,7 +126,7 @@
       Date of birth
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.dob}}
+      {{items.formatted_date}}
     </dd>
   </div>
 
@@ -214,6 +214,8 @@
     </dd>
   </div>
 
+      {# SEC QUESTIONS #}
+
 <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
       Security question 1
@@ -221,6 +223,7 @@
     <dd class="govuk-summary-list__value">
       {{items.sec_question1}}
     </dd>
+
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="addClaimantDetails">
         Change<span class="govuk-visually-hidden"> Security question 1</span>
@@ -235,6 +238,7 @@
     <dd class="govuk-summary-list__value">
       {{items.sec_question2}}
     </dd>
+
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="addClaimantDetails">
         Change<span class="govuk-visually-hidden"> Security question 2</span>
@@ -244,10 +248,39 @@
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
+      Security answer 1
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.sec_answer1}}
+    </dd>
+
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="addClaimantDetails">
+        Change<span class="govuk-visually-hidden"> Security answer 1</span>
+      </a>
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Security answer 2
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.sec_answer2}}
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="addClaimantDetails">
+        Change<span class="govuk-visually-hidden"> Security answer 2</span>
+      </a>
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
       Appointee
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.app_title}} {{items.app_first_name}} {{items.app_last_name}}
+      {{items.appointee}}
     </dd>
     {# <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="#">

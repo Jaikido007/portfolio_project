@@ -9,7 +9,8 @@ const chalk = require('chalk');
 const PORT = process.env.PORT;
 const sessions = require('express-session');
 
-const webController = require('./webcontroller')
+const webController = require('./webcontroller');
+const webUserController = require('./webUserController');
 
 app.use(express.static(path.join('./public/')));
 app.use('assets', express.static(path.join(__dirname, '../assets')));
@@ -63,10 +64,13 @@ app.get('/userMaintenance', webController.processSystemUsers);
 
 app.get('/updateEditProfile', webController.processUpdateEditProfile);
 
+app.get('/pwmenu', (request, response) => {
+    response.render('pwmenu');
+});
+
 app.get('/newUser', (request, response) => {
     response.render('newUser');
 });
-
 
 
 // APP.SET SECTION
@@ -95,7 +99,7 @@ app.use(bodyParser.json());
 
 // APP.POST SECTION
 
-app.post('/login',  webController.processLoginUser);
+app.post('/login', webUserController.processLoginUser);
 app.post('/welcome',  webController.processWelcomeUser);
 
 app.post('/searchClaimant', webController.processSearchClaimant);
@@ -127,6 +131,13 @@ app.post('/addBankDetails', webController.processAddBankDetails);
 app.post('/updateBankDetails', webController.processUpdateBankDetails);
 app.post('/addPensionDetails', webController.processAddPensionDetails);
 app.post('/updatePensionDetails', webController.processUpdatePensionDetails);
+
+app.post('/processWeekly', webController.processWeekly);
+app.post('/processMonthly', webController.processMonthly);
+
+app.post('/paymentRunOptions', (request, response) => {
+    response.render('paymentRunOptions', {'message': ''})
+});
 
 
 

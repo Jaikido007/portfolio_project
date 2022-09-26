@@ -12,21 +12,32 @@
 </br>
 </br>
   <h1 class="govuk-heading-xl">Change Password</h1>
-  <input class="govuk-input govuk-input--width-20" type="text" name="password1" placeholder="" required="required">
+  <input class="govuk-input govuk-input--width-20" type="password" name="password1" placeholder="" required="required">
 </br>
 </br>
 <h1 class="govuk-heading-l">Confirm Password</h1>
   <input class="govuk-input govuk-input--width-20" type="password" name="password2" placeholder="" required="required">
 </br>
 </br>
+<h1 class="govuk-heading-l"></h1>
+  <input class="govuk-input govuk-input--width-20" type="hidden" id="cui" name="cui" placeholder="" required="required">
+</br>
+</br>
 <button class="govuk-button" data-module="govuk-button" type="login">
   Submit
 </button>
 </form>
+
+<script>
+  const queryString = window.location.search
+  const urlParams = new URLSearchParams(queryString)
+  document.getElementById('cui').value = urlParams.get('id')
+</script>
+
 {% endblock %}
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
-  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</scrip>
   <script src="styles/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
 {% endblock %}

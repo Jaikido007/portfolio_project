@@ -53,7 +53,7 @@
           <label class="govuk-label govuk-date-input__label" for="dob-day">
             Day
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dob-day" name="dob-day" type="text" autocomplete="bday-day" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dob-day" name="dob-day" type="text" autocomplete="bday-day" inputmode="numeric" required="required">
         </div>
       </div>
       <div class="govuk-date-input__item">
@@ -61,7 +61,7 @@
           <label class="govuk-label govuk-date-input__label" for="dob-month">
             Month
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dob-month" name="dob-month" type="text" autocomplete="bday-month" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dob-month" name="dob-month" type="text" autocomplete="bday-month" inputmode="numeric" required="required">
         </div>
       </div>
       <div class="govuk-date-input__item">
@@ -69,7 +69,7 @@
           <label class="govuk-label govuk-date-input__label" for="dob-year">
             Year
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dob-year" name="dob-year" type="text" autocomplete="bday-year" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dob-year" name="dob-year" type="text" autocomplete="bday-year" inputmode="numeric" required="required">
         </div>
       </div>
     </div>
@@ -77,51 +77,16 @@
   </fieldset>
 </div>
 
-{# todo ---- NUNJUKS DOB #}
-
-{# {{ govukDateInput({
-  fieldset: {
-    legend: {
-      text: "What is your date of birth?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 28 12 1922"
-  },
-  errorMessage: {
-    text: "Your date of birth must be in the past"
-  },
-  id: "dob",
-  namePrefix: "dob",
-  items: [
-    {
-      classes: "govuk-input--width-2 govuk-input--error",
-      name: "day",
-      value: ""
-    },
-    {
-      classes: "govuk-input--width-2 govuk-input--error",
-      name: "month",
-      value: ""
-    },
-    {
-      classes: "govuk-input--width-4 govuk-input--error",
-      name: "year",
-      value: ""
-    }
-  ]
-}) }} #}
-
 <h1 class="govuk-heading-l">{{items.sc1}}</h1>
-  <input class="govuk-input govuk-input--width-20" type="password" name="sec1">
+  <input class="govuk-input govuk-input--width-20" type="password" name="sec1" required="required">
 </br>
-</br>
+
 <h1 class="govuk-heading-l">{{items.sc2}}</h1>
-  <input class="govuk-input govuk-input--width-20" type="password" name="sec2">
+  <input class="govuk-input govuk-input--width-20" type="password" name="sec2" required="required">
 </br>
-</br>
+  <p id="national-insurance-number-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> {{message}}
+  </p>
     <button class="govuk-button" data-module="govuk-button" type="submit">Submit</button>
     </form>
 

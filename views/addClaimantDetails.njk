@@ -224,9 +224,15 @@
         </h1>
     </dt>
 
-    <dd class="govuk-summary-list__value">
-      <input class="govuk-input" id="sc1" name="sc1" type="text">
-    </dd>
+    <div class="govuk-form-group">
+
+    <select class="govuk-select" id="secQ1" name="secQ1">
+    <option value="{{items.sec1id}}" selected>{{items.sec_question1}}</option>
+    {% for secQuestion in secQuestions %} 
+    <option value="{{secQuestion.id}}">{{secQuestion.question}}</option>
+    {% endfor %}
+  </select>
+</div>
   </div>
 
   <div class="govuk-summary-list__row">
@@ -237,8 +243,40 @@
         </h1>
     </dt>
 
+<div class="govuk-form-group">
+
+    <select class="govuk-select" id="secQ2" name="secQ2">
+    <option value="{{items.sec2id}}" selected>{{items.sec_question2}}</option>
+    {% for secQuestion in secQuestions %} 
+    <option value="{{secQuestion.id}}">{{secQuestion.question}}</option>
+    {% endfor %}
+  </select>
+</div>
+  </div>
+
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="sa1">
+          Security answer 1
+        </label>
+        </h1>
+    </dt>
+
     <dd class="govuk-summary-list__value">
-      <input class="govuk-input" id="sc2" name="sc2" type="text">
+      <input {% if(items.sec_answer1 == '')  %} value="" {% elif(items.sec_answer1 !='')%} value="{{items.sec_answer1}}" {% endif %} class="govuk-input" id="secA1" name="secA1" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="sa2">
+          Security answer 2
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.sec_answer2 == '')  %} value="" {% elif(items.sec_answer2 !='')%} value="{{items.sec_answer2}}" {% endif %} class="govuk-input" id="secA2" name="secA2" type="text">
     </dd>
   </div>
 
@@ -247,7 +285,7 @@
       Appointee
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.app_title}} {{items.app_first_name}} {{items.app_last_name}}
+      {{items.appointee}}
     </dd>
   </div>
 </dl>

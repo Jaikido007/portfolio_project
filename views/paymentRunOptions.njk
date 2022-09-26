@@ -17,24 +17,24 @@
     {
       text: "User menu",
       href: "usermenu"
+    },
+        {
+      text: "Payment run",
+      href: "paymentRunOptions"
     }
   ]
 }) }}
 
-  <h1 class="govuk-heading-xl">User menu</h1>
+  <h1 class="govuk-heading-xl">Payment run</h1>
 
   <form class="govuk-label--l" action=searchClaimant method="POST">
 
-    <a href="searchClaimant"> <button class="govuk-button" data-module="govuk-button" type="button" formaction="searchClaimant">
-    Search claimant
-    </button></a>
-    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="benefitOverview">Benefit overview</button>
-    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="editProfile">Edit profile</button>
-    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="userMaintenance">User maintenance</button>  
-  <button class="govuk-button" data-module="govuk-button" type="overview" formaction="paymentRunOptions">Payment run</button>
-
+    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="processWeekly">Process weekly</button>
+    <button class="govuk-button" data-module="govuk-button" type="overview" formaction="processMonthly">Process monthly</button>
+ 
     </form>
-
+  <p>{{message}}</p>
+  
 {% endblock %}
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}

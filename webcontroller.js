@@ -2,76 +2,72 @@ const {encryptPassword, checkEncryptedPassword} = require ('./encrypt_password')
 const chalk = require('chalk');
 const webDbController = require('./webDatabaseController');
 const res = require('express/lib/response');
-let session
-
-const processLoginUser = (request, response) => {
-    let username = request.body.username;
-    let password = request.body.password;
-    webDbController.checkUsernameExists(username)
-    .then(result => {
-        if (result.rowCount == 0) {
-            // FIX LATER
-            console.log(`${chalk.red ("User doesn't exist in the database ")}`)
-
-        } else {
-
-            webDbController.getUsernameAndPassword({username})
-            .then(result => {
-                if (result.rows[0].is_active === 'Y') {
-                    let encryptedpw = result.rows[0].encrypted_password
-                    checkEncryptedPassword({password, encryptedpw})
-                    .then((result) => {
-                        if (result === true) {
-                            session = request.session;
-                            session.username = username
-
-                            response.render('usermenu')
-                        } else {
-                            response.render ('welcome')
-                            console.log(`${chalk.red ("Password doesn't match encrypted password ")}`)
-                        }
-                    })
-                    .catch(error => {
-                        response.status(500).send(error);
-                        console.log(`${chalk.red ("Error: Passwords don't match " + error)}`)
-                    }); 
-                }
-                }) 
-
-                .catch(() => response.status(500).send(`ERROR, couldn't retrieve username and password`));
-            }})
-            .catch(() => response.status(500).send(`ERROR, user doesn't exist in the database`));
-        };
 
 const validateUsername2 = (request, response) => {
     let username = request.body.username;
         webDbController.validateUsername({username})
         .then(result => {
-            if(result.rows[0].username === username) {
-                response.render('pwmenu', {username: username})
+            if(result.rowCount === 0) {
+                response.render('welcome', {'message':'Invalid username or password'})
             } else {
-                response.render('welcome')
-            }
-        })
+                webDbController.initiatePasswordReset(username)
+                .then(result => {
+                    webDbController.getUUID(username)
+                    .then(result => {
+                        response.render('fakeEmailPage', {'items': result.rows[0]})
+                    })
+                    .catch(error => {
+                        console.log(`${chalk.red ("Error: Can't get UUID from database " + error)}`)
+                })
+                })
+                .catch(error => {
+                    console.log(`${chalk.red ("Error: Couldn't update database with reset credentials " + error)}`)
+            })
+        }
+    })
+    .catch(error => {
+            console.log(`${chalk.red ("Error: Couldn't validate user exists! " + error)}`)
+    })
 }
+    
+
 
 const validateUsername = (request, response) => {
     response.render('validateUsername')
 }
 
 const processChangePW = (request, response) => {
+    let cui = request.body.cui
     let newPW = request.body.password2;
-    let username = request.body.username
-    webDbController.changeUserPW(username, newPW)
+    // let username = request.body.username
+    webDbController.checkUserValidToResetPassword(cui)
     .then(result => {
-            response.render('usermenu', {username: username})
+        if (result.rowCount == 0) {
+            response.render('welcome', {'message': 'Unable to reset password'})
+        } else {
+            if (result.rows[0].password_reset === 'Y'){
+                encryptPassword(newPW)
+                .then(result => {
+                    webDbController.changeUserPW(cui, result)
+                    .then(result => {
+                        response.render('welcome', {'message': 'Password successfully updated'})
+                    })
+                    .catch(error => {
+                        console.log(`${chalk.red ("Error: failed to update password change " + error)}`)
+                    })  
+                })
+                .catch(error => {
+                    console.log(`${chalk.red ("Error: failed to encrypt password " + error)}`)
+                })  
+            } else {
+                response.render('welcome', {'message': 'Unable to reset password'})
+            }
         }
-    )
+    })
     .catch(error => {
-        // response.render('register', {message: dbError})
-        console.log(`${chalk.red ("Error: processChangePW " + error)}`)
-    })  
-}
+        console.log(`${chalk.red ("Error:  User is not valid to reset password" + error)}`)
+    }) 
+} 
 
 processUserMenu = (request, response) => {
     session = request.session
@@ -83,7 +79,6 @@ const processSearchClaimant = (request, response) => {
     let enteredNino = request.body.nino;
     let newString = tidyString(enteredNino);
     session = request.session
-    session.claimantNino = newString
     webDbController.verifyNino(newString)
     .then(result => {
         if(result.rowCount == 0) {
@@ -91,6 +86,9 @@ const processSearchClaimant = (request, response) => {
             response.render('searchClaimant', {message});
         } else {
             if(result.rows[0].nino === newString) {
+                session.claimantNino = newString
+                console.log('Setting session ID to: ' + result.rows[0].id)
+                session.claimantID = result.rows[0].id
                 webDbController.getSecurityQuestions(result.rows[0].nino)
                 .then (result => {
                     response.render('securityLogin', {items:result.rows[0]})
@@ -99,7 +97,7 @@ const processSearchClaimant = (request, response) => {
                     console.log(`${chalk.red ("Error: processSearchClaimant 1st catch " + error)}`)
                 })  
             } else {
-                let message = ('Entered NINO does not match!')
+                let message = ('Entered National Insurance Number does not match!')
                 response.render('searchClaimant', {message});
             }
 
@@ -119,13 +117,21 @@ const tidyString = (nino => {
 })
 
 const processBenefitOverview = (request, response) => {
-    response.render('benefitOverview')
+    webDbController.getBenefitOverviewDetails()
+    .then(result => {
+        console.log(result.rows)
+        response.render('benefitOverview', {'items': result.rows})
+    }) 
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processBenefitOverview " + error)}`)
+})
 }
+
 
 const processEditProfile = (request, response) => {
     session = request.session
     if(session.username == null){
-        response.render('welcome')
+        response.render('welcome', {'message': 'Session timeout'})
     } else {
         console.log(`${chalk.red ("Error: processEditProfile ")}`)
         let username = session.username
@@ -147,6 +153,7 @@ const processUpdateEditProfile = (request, response) => {
 const processSecurityClearence = (request, response) => {
     let dobNum = verifyDOB(request.body['dob-day'], request.body['dob-month'], request.body['dob-year'])
     session = request.session
+    console.log('Process security clearance: clid = ' + session.claimantID)
     let nino = session.claimantNino
     webDbController.verifySecurityDetails(nino)
     .then (result => {
@@ -169,6 +176,7 @@ const processClaimantDetails = (request, response) => {
     let nino = session.claimantNino
     webDbController.getClaimantUserDetails(nino)
     .then(result => {
+        // RESEARCH LATER
         session.claimantID = result.rows[0].id
         response.render('claimantDetails', {'items':result.rows[0]})
     }
@@ -179,7 +187,7 @@ const processClaimantDetails = (request, response) => {
 }
 
 const processWelcomeUser = (request, response) => {
-    response.render('welcome')
+    response.render('welcome', {'message': ''})
 }
 
 const processAppointeeDetails = (request, response) => {
@@ -228,7 +236,7 @@ const processPaymentHistory = (request, response) => {
     let nino = session.claimantNino
     webDbController.getPaymentUserHistory(nino)
     .then(result => {
-        response.render('paymentHistory', {'items':result.rows[0]})
+        response.render('paymentHistory', {'items':result.rows})
     }
     )
 .catch(error => {
@@ -339,6 +347,7 @@ const processAddClaimant = (request, response) => {
 const processUpdateClaimant = (request, response) => {
     let session = request.session
     let nino = session.claimantNino
+    // console.log('processUpdateClaimant info:' + request.body)
     webDbController.updateClaimantInDB(nino, request.body)
     .then(result => {
         processClaimantDetails(request, response);
@@ -371,9 +380,10 @@ const processAddBankDetails = (request, response) => {
 }
 
 const processUpdateBankDetails = (request, response) => {
+    console.log('Update bank details session = '+ request.session)
     let session = request.session
     let clid = session.claimantID
-    console.log(request.body)
+    console.log('Update bank details: clid = ' + clid)
     webDbController.updateBankDetailsInDB(clid, request.body)
     .then(result => {
         processBankDetails(request, response);
@@ -391,8 +401,8 @@ const processAddPensionDetails = (request, response) => {
 const processUpdatePensionDetails = (request, response) => {
     let session = request.session
     let nino = session.claimantNino
-    console.log(request.body)
-    webDbController.updatePensionDetailsInDB(1, request.body)
+    let clid = session.claimantID
+    webDbController.updatePensionDetailsInDB(clid, request.body)
     .then(result => {
         processPensionDetails(request, response);
     })
@@ -411,7 +421,11 @@ const processAddEditClaimant = (request, response) => {
     } else {
         webDbController.getClaimantUserDetails(session.claimantNino)
         .then(result => {
-            response.render('addClaimantDetails', {items: result.rows[0]})
+            let clDetails = result
+            webDbController.getAllSecurityQuestions()
+            .then(result => {
+                response.render('addClaimantDetails', {items: clDetails.rows[0], secQuestions:result.rows})
+            })
         })
     }
 }
@@ -453,7 +467,6 @@ const processAddEditPensionDetails = (request, response) => {
                 let penTypes = result;
                 webDbController.getPensionFrequency()
                 .then(result => {
-                    console.log(penDetails.rows[0])
                     response.render('addPensionDetails', {items: penDetails.rows[0], penTypes:penTypes.rows, penFreqs:result.rows})
                 })
                 .catch(error => {
@@ -470,16 +483,102 @@ const processAddEditPensionDetails = (request, response) => {
     }
 }
 
+const processWeekly = (request, response) => {
+    webDbController.getPaymentFrequencyID('Weekly')
+    .then(result => {
+        let payFrequency = result.rows[0].id
+        webDbController.getClaimantsReqPayment(payFrequency)
+        .then(result => {
+            if(result.rowCount === 0) {
+                response.render('paymentRunOptions', {'message': 'Nothing to process'})
+            } else {
 
+
+            let dbDate = result.rows[0].current_date
+            let myDate = dbDate.getFullYear()+"/"+(dbDate.getMonth()+1)+ "/"+dbDate.getDate();
+            
+            let i = result.rowCount
+            console.log("Row count = " + i)
+            for(let j = 0; j <= i-1; j++){
+
+                console.log("Returned date is: " + myDate)
+                webDbController.insertClaimantPensionDetails(
+                    myDate,
+                    result.rows[j].pt_amount,
+                    result.rows[j].pension_type_id,
+                    result.rows[j].claimant_id,
+                    result.rows[j].bank_name,
+                    result.rows[j].account_no,
+                    result.rows[j].sort_code,
+                    result.rows[j].payment_status
+                ) 
+                .then(result => {
+
+                })
+                .catch(error => {
+                    console.log(`${chalk.red ("Error: Couldn't insert payment details " + error)}`)
+                }) 
+            }
+            response.render('paymentRunOptions', {'message': 'Payment run succesful'})
+        }
+        })
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: getting pension frequency ID" + error)}`)
+    }) 
+}
+
+const processMonthly = (request, response) => {
+    webDbController.getPaymentFrequencyID('Monthly')
+    .then(result => {
+        let payFrequency = result.rows[0].id
+        webDbController.getClaimantsReqPayment(payFrequency)
+        .then(result => {
+            if(result.rowCount === 0) {
+                response.render('paymentRunOptions', {'message': 'Nothing to process'})
+            } else {
+
+
+            let dbDate = result.rows[0].current_date
+            let myDate = dbDate.getFullYear()+"/"+(dbDate.getMonth()+1)+ "/"+dbDate.getDate();
+            
+            let i = result.rowCount
+            console.log("Row count = " + i)
+            for(let j = 0; j <= i-1; j++){
+
+                console.log("Returned date is: " + myDate)
+                webDbController.insertClaimantPensionDetails(
+                    myDate,
+                    result.rows[j].pt_amount,
+                    result.rows[j].pension_type_id,
+                    result.rows[j].claimant_id,
+                    result.rows[j].bank_name,
+                    result.rows[j].account_no,
+                    result.rows[j].sort_code,
+                    result.rows[j].payment_status
+                ) 
+                .then(result => {
+
+                })
+                .catch(error => {
+                    console.log(`${chalk.red ("Error: Couldn't insert payment details " + error)}`)
+                }) 
+            }
+            response.render('paymentRunOptions', {'message': 'Payment run succesful'})
+        }
+        })
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: getting pension frequency ID" + error)}`)
+    }) 
+}
 
 
 module.exports = {
-    processLoginUser,
     processWelcomeUser,
     validateUsername,
     validateUsername2,
     processChangePW,
-    processUserMenu,
     processSearchClaimant,
     processBenefitOverview,
     processEditProfile,
@@ -510,4 +609,6 @@ module.exports = {
     processAddEditAppointee,
     processAddEditBankDetails,
     processAddEditPensionDetails,
+    processWeekly,
+    processMonthly,
 }

@@ -18,17 +18,10 @@
       text: "User menu",
       href: "usermenu"
     },
-    {
-      text: "Search claimant",
-      href: "searchClaimant"
-    },
-    {
-      text: "Security clearence",
-      href: "securityLogin"
-    },
+
       {
-      text: "Payment history",
-      href: "paymentHistory"
+      text: "Benefit overview",
+      href: "benefitOverview"
     }
   ]
 }) }}
@@ -39,56 +32,30 @@
     Contents
   </h2>
   <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/claimantDetails">
-        Claimant details
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/appointeeDetails">
-        Appointee details
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/bankDetails">
-        Bank details
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/pensionDetails">
-        Pension details
-      </a>
-    </li>
         <li class="govuk-tabs__list-item  govuk-tabs__list-item--selected">
-      <a class="govuk-tabs__tab" href="/paymentHistory">
-        Payment history
+      <a class="govuk-tabs__tab" href="/benefitOverview">
+        Benefit overview
       </a>
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="bankDetails">
-    <h2 class="govuk-heading-l">Payment history</h2>
+    <h2 class="govuk-heading-l">Benefit overview</h2>
 
 <dl class="govuk-summary-list">
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      Date
+      Benefit type
     </dt>
     <dt class="govuk-summary-list__key">
-      Amount paid
+      Number of claimants
     </dt>
       <dt class="govuk-summary-list__key">
-      Bank
+      Last payment date
     </dt>
 
         <dt class="govuk-summary-list__key">
-      Acc no.
-    </dt>
-        <dt class="govuk-summary-list__key">
-      Sort code
-    </dt>
-        <dt class="govuk-summary-list__key">
-      Status
+      Amount paid
     </dt>
   </div>
 
@@ -96,22 +63,16 @@
   <div class="govuk-summary-list__row">
 
     <dd class="govuk-summary-list__value">
-      {{item.formatted_date}}
+      {{item.pension_type}}
     </dd>
     <dd class="govuk-summary-list__value">
-      £{{item.amount_paid}}
+      {{item.count}}
     </dd>
       <dd class="govuk-summary-list__value">
-      {{item.bank_paid}}
+      {{item.formatted_date}}
     </dd>
         <dd class="govuk-summary-list__value">
-      {{item.account_paid}}
-    </dd>
-        <dd class="govuk-summary-list__value">
-      {{item.sort_code_paid}}
-    </dd>
-        <dd class="govuk-summary-list__value">
-      {{item.payment_status}}
+      £{{item.sum}}
     </dd>
   </div>
       {% endfor %}

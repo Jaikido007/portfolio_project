@@ -46,20 +46,19 @@ html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a
 
 <h1 class="govuk-heading-xl">Enter new user details</h1>
 <form class="govuk-label--l" action=newUser method="POST">
-<h1 class="govuk-heading-l">Username</h1>
-<input class="govuk-input govuk-input--width-20" type="text" name="username" placeholder="username" value="{{username}}">
+<h1 class="govuk-heading-m">Username</h1>
+<input required class="govuk-input govuk-input--width-20" type="text" name="username" placeholder="username" value="{{username}}">
 </br>
 </br>
-<h1 class="govuk-heading-l">Email</h1>
-<input class="govuk-input govuk-input--width-20" type="text" name="email" placeholder="email">
+<h1 class="govuk-heading-m">Email</h1>
+<input required class="govuk-input govuk-input--width-20" type="text" name="email" placeholder="email">
 </br>
 </br>
-<h1 class="govuk-heading-l">Password</h1>
-<input class="govuk-input govuk-input--width-20" type="password" name="password" placeholder="password">
+<h1 class="govuk-heading-m">Password</h1>
+<input required class="govuk-input govuk-input--width-20" type="password" name="password" placeholder="password">
 </br>
 </br>
-<label for="users">User status</label>
-<br>
+<label class="govuk-heading-m" for="users">User status</label>
 <select required class="govuk-input govuk-input--width-20" name="usertype" id="usertype" style='color:gray' oninput='style.color="black"'>
 
     <option value="" disabled selected>select an option:</option>

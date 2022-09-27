@@ -29,6 +29,26 @@
 
 {# LOGIN USERNAME #}
 
+{#! ERROR HANDLING #}
+
+{# <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary" id="error-message-display" style="display:none;">
+  <h2 class="govuk-error-summary__title" id="error-summary-title">
+    There is a problem
+  </h2>
+  <div class="govuk-error-summary__body">
+    <ul class="govuk-list govuk-error-summary__list">
+      <li>
+        <a href="#passport-issued-day">The date your passport was issued must be in the past</a>
+      </li>
+      <li>
+        <a href="#postcode-input">Enter a postcode, like AA1 1AA</a>
+      </li>
+    </ul>
+  </div>
+</div> #}
+
+{#! POST ERROR HANDLING #}
+
 <h1 class="govuk-heading-xl">Sign in to the Pension Payments account</h1>
 <form class="govuk-label--l" action=login method="POST">
 <h1 class="govuk-heading-m">Username</h1>
@@ -49,6 +69,7 @@
   Forgot Password
 </button>
 </form>
+
 <a href="newUser" class="govuk-link">Click here to create new account</a>
 {% endblock %}
 {% block bodyEnd %}

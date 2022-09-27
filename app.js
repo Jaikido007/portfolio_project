@@ -11,6 +11,7 @@ const sessions = require('express-session');
 
 const webController = require('./webcontroller');
 const webUserController = require('./webUserController');
+const webPaymentController = require('./webPaymentController');
 
 app.use(express.static(path.join('./public/')));
 app.use('assets', express.static(path.join(__dirname, '../assets')));
@@ -36,7 +37,7 @@ app.get('/login', (request, response) => {
     response.render('welcome');
 });
 
-app.get('/usermenu', webController.processUserMenu);
+ app.get('/usermenu', webUserController.processUserMenu);
 
 app.get('/searchClaimant', (request, response) => {
     response.render('searchClaimant');
@@ -60,9 +61,9 @@ app.get('/addPensionDetails', webController.processAddEditPensionDetails);
 
 app.get('/paymentHistory', webController.processPaymentHistory);
 
-app.get('/userMaintenance', webController.processSystemUsers);
+app.get('/userMaintenance', webUserController.processSystemUsers);
 
-app.get('/updateEditProfile', webController.processUpdateEditProfile);
+app.get('/updateEditProfile', webUserController.processUpdateEditProfile);
 
 app.get('/pwmenu', (request, response) => {
     response.render('pwmenu');
@@ -73,7 +74,7 @@ app.get('/newUser', (request, response) => {
 });
 
 
-// APP.SET SECTION
+// // APP.SET SECTION
 
 app.set('views', 'views');
 app.set('view engine', 'njk');
@@ -100,7 +101,7 @@ app.use(bodyParser.json());
 // APP.POST SECTION
 
 app.post('/login', webUserController.processLoginUser);
-app.post('/welcome',  webController.processWelcomeUser);
+app.post('/welcome',  webUserController.processWelcomeUser);
 
 app.post('/searchClaimant', webController.processSearchClaimant);
 app.post('/processSearchClaimant', webController.processSearchClaimant);
@@ -109,20 +110,20 @@ app.post('/claimantDetails', webController.processClaimantDetails);
 
 app.post('/benefitOverview', webController.processBenefitOverview);
 
-app.post('/editProfile', webController.processEditProfile);
+app.post('/editProfile', webUserController.processEditProfile);
 
-app.post('/userMaintenance', webController.processUserMaintenance);
-app.post('/newUser', webController.processNewUser);
+app.post('/userMaintenance', webUserController.processUserMaintenance);
+app.post('/newUser', webUserController.processNewUser);
 
-app.post('/validateUsername',  webController.validateUsername);
-app.post('/validateusername2', webController.validateUsername2);
-app.post('/changepw', webController.processChangePW); 
+app.post('/validateUsername',  webUserController.validateUsername);
+app.post('/validateusername2', webUserController.validateUsername2);
+app.post('/changepw', webUserController.processChangePW); 
 
-app.post('/deleteUser', webController.processDeleteUser);
-app.post('/makeAdmin', webController.processMakeAdmin);
-app.post('/removeAdmin', webController.processRemoveAdmin);
-app.post('/activateUser', webController.processActivateUser);
-app.post('/deactivateUser', webController.processDeactivateUser);
+app.post('/deleteUser', webUserController.processDeleteUser);
+app.post('/makeAdmin', webUserController.processMakeAdmin);
+app.post('/removeAdmin', webUserController.processRemoveAdmin);
+app.post('/activateUser', webUserController.processActivateUser);
+app.post('/deactivateUser', webUserController.processDeactivateUser);
 app.post('/addClaimant', webController.processAddClaimant);
 app.post('/updateClaimant', webController.processUpdateClaimant);
 app.post('/addAppointee', webController.processAddAppointee);
@@ -132,8 +133,8 @@ app.post('/updateBankDetails', webController.processUpdateBankDetails);
 app.post('/addPensionDetails', webController.processAddPensionDetails);
 app.post('/updatePensionDetails', webController.processUpdatePensionDetails);
 
-app.post('/processWeekly', webController.processWeekly);
-app.post('/processMonthly', webController.processMonthly);
+app.post('/processWeekly', webPaymentController.processWeekly);
+app.post('/processMonthly', webPaymentController.processMonthly);
 
 app.post('/paymentRunOptions', (request, response) => {
     response.render('paymentRunOptions', {'message': ''})

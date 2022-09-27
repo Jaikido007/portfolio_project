@@ -1,79 +1,6 @@
-const {encryptPassword, checkEncryptedPassword} = require ('./encrypt_password');
+//const {encryptPassword, checkEncryptedPassword} = require ('./encrypt_password');
 const chalk = require('chalk');
 const webDbController = require('./webDatabaseController');
-const res = require('express/lib/response');
-
-const validateUsername2 = (request, response) => {
-    let username = request.body.username;
-        webDbController.validateUsername({username})
-        .then(result => {
-            if(result.rowCount === 0) {
-                response.render('welcome', {'message':'Invalid username or password'})
-            } else {
-                webDbController.initiatePasswordReset(username)
-                .then(result => {
-                    webDbController.getUUID(username)
-                    .then(result => {
-                        response.render('fakeEmailPage', {'items': result.rows[0]})
-                    })
-                    .catch(error => {
-                        console.log(`${chalk.red ("Error: Can't get UUID from database " + error)}`)
-                })
-                })
-                .catch(error => {
-                    console.log(`${chalk.red ("Error: Couldn't update database with reset credentials " + error)}`)
-            })
-        }
-    })
-    .catch(error => {
-            console.log(`${chalk.red ("Error: Couldn't validate user exists! " + error)}`)
-    })
-}
-    
-
-
-const validateUsername = (request, response) => {
-    response.render('validateUsername')
-}
-
-const processChangePW = (request, response) => {
-    let cui = request.body.cui
-    let newPW = request.body.password2;
-    // let username = request.body.username
-    webDbController.checkUserValidToResetPassword(cui)
-    .then(result => {
-        if (result.rowCount == 0) {
-            response.render('welcome', {'message': 'Unable to reset password'})
-        } else {
-            if (result.rows[0].password_reset === 'Y'){
-                encryptPassword(newPW)
-                .then(result => {
-                    webDbController.changeUserPW(cui, result)
-                    .then(result => {
-                        response.render('welcome', {'message': 'Password successfully updated'})
-                    })
-                    .catch(error => {
-                        console.log(`${chalk.red ("Error: failed to update password change " + error)}`)
-                    })  
-                })
-                .catch(error => {
-                    console.log(`${chalk.red ("Error: failed to encrypt password " + error)}`)
-                })  
-            } else {
-                response.render('welcome', {'message': 'Unable to reset password'})
-            }
-        }
-    })
-    .catch(error => {
-        console.log(`${chalk.red ("Error:  User is not valid to reset password" + error)}`)
-    }) 
-} 
-
-processUserMenu = (request, response) => {
-    session = request.session
-    session.claimantNino = null
-    response.render('usermenu')
-}
 
 const processSearchClaimant = (request, response) => {
     let enteredNino = request.body.nino;
@@ -97,10 +24,9 @@ const processSearchClaimant = (request, response) => {
                     console.log(`${chalk.red ("Error: processSearchClaimant 1st catch " + error)}`)
                 })  
             } else {
-                let message = ('Entered National Insurance Number does not match!')
+                let message = ('National Insurance Number entered does not match!')
                 response.render('searchClaimant', {message});
             }
-
         }
     })
     .catch(error => {
@@ -119,35 +45,11 @@ const tidyString = (nino => {
 const processBenefitOverview = (request, response) => {
     webDbController.getBenefitOverviewDetails()
     .then(result => {
-        console.log(result.rows)
         response.render('benefitOverview', {'items': result.rows})
     }) 
     .catch(error => {
         console.log(`${chalk.red ("Error: processBenefitOverview " + error)}`)
 })
-}
-
-
-const processEditProfile = (request, response) => {
-    session = request.session
-    if(session.username == null){
-        response.render('welcome', {'message': 'Session timeout'})
-    } else {
-        console.log(`${chalk.red ("Error: processEditProfile ")}`)
-        let username = session.username
-        webDbController.getSystemUserDetails(username)
-        .then(result => {
-            response.render('editProfile', {'items':result.rows[0]})
-        }
-        )
-    .catch(error => {
-        console.log(`${chalk.red ("Error: processEditProfile " + error)}`)
-    })  
-    }
-}
-
-const processUpdateEditProfile = (request, response) => {
-    response.render('updateEditProfile')
 }
 
 const processSecurityClearence = (request, response) => {
@@ -186,10 +88,6 @@ const processClaimantDetails = (request, response) => {
 })  
 }
 
-const processWelcomeUser = (request, response) => {
-    response.render('welcome', {'message': ''})
-}
-
 const processAppointeeDetails = (request, response) => {
     let session = request.session
     let nino = session.claimantNino
@@ -202,8 +100,6 @@ const processAppointeeDetails = (request, response) => {
         console.log(`${chalk.red ("Error: processAppointeeDetails " + error)}`)
     })  
 }
-
-
 
 const processBankDetails = (request, response) => {
     let session = request.session
@@ -244,104 +140,8 @@ const processPaymentHistory = (request, response) => {
 })  
 }
 
-const processUserMaintenance = (request, response) => {
-    webDbController.getAllSystemUserDetails()
-    .then(result => {
-        response.render('userMaintenance', {'items':result.rows})
-    }
-    )
-.catch(error => {
-    console.log(`${chalk.red ("Error: processUserMaintenance " + error)}`)
-}) 
-}
-
-const processNewUser = (request, response) => {
-    username = request.body.username
-    email = request.body.email
-    password = request.body.password
-    encryptedpw = ''
-    usertypeno = 0
-    usertype = request.body.usertype
-    switch(usertype) {
-        case 'admin':
-        usertypeno = 1
-        break;
-        case 'user':
-            usertypeno = 2
-        break;
-        default:
-            usertype = 99
-    }
-    encryptPassword(password)
-    .then (result => {
-        encryptedpw = result
-        webDbController.insertSystemUser({username, email, encryptedpw, usertypeno})
-        .then (() => {
-            webDbController.getSystemUserDetails()
-            .then(result => {
-                response.render('userMaintenance', {'items':result.rows})
-            })
-        })
-        .catch (error => {
-            console.log(`${chalk.red} ERROR: processNewUser 1st catch ` + error)
-        })
-    })
-    .catch(error => {
-        console.log(`${chalk.red} Error: processNewUser 2nd catch` + error)
-    })
-}
-
-const processSystemUsers = (request, response) => {
-    webDbController.getAllSystemUserDetails()
-    .then(result => {
-        response.render('userMaintenance', {'items':result.rows})
-    }
-    )
-.catch(error => {
-    console.log(`${chalk.red ("Error: processUserMaintenance " + error)}`)
-}) 
-}
-
-// * PROCESS BUTTONS
-
-const processDeleteUser = (request, response) => {
-    let uid = request.body.hiddenDelID;
-    webDbController.deleteUserFromDB(uid)
-    .then(() => processSystemUsers(request, response))
-    .catch(() => response.status(500).send('error'));
-}
-
-const processMakeAdmin = (request, response) => {
-    let uid = request.body.hiddenMakeAdminId;
-    webDbController.makeAdminUserinDB(uid)
-    .then(() => processSystemUsers(request, response))
-    .catch(() => response.status(500).send('error'));
-}
-
-const processRemoveAdmin = (request, response) => {
-    let uid = request.body.hiddenRemoveAdminId;
-    webDbController.removeAdminUserinDB(uid)
-    .then(() => processSystemUsers(request, response))
-    .catch(() => response.status(500).send('error'));
-}
-
-const processActivateUser = (request, response) => {
-    let uid = request.body.hiddenActivateUserId;
-    webDbController.activateUserinDB(uid)
-    .then(() => processSystemUsers(request, response))
-    .catch(() => response.status(500).send('error'));
-}
-
-const processDeactivateUser = (request, response) => {
-    let uid = request.body.hiddenDeactivateUserId;
-    webDbController.deactivateUserinDB(uid)
-    .then(() => processSystemUsers(request, response))
-    .catch(() => response.status(500).send('error'));
-}
-
 const processAddClaimant = (request, response) => {
     console.log('processAddClaimant')
-
 }
 
 const processUpdateClaimant = (request, response) => {
@@ -359,7 +159,6 @@ const processUpdateClaimant = (request, response) => {
 
 const processAddAppointee = (request, response) => {
     console.log('processAddAppointee')
-
 }
 
 const processUpdateAppointee = (request, response) => {
@@ -410,7 +209,6 @@ const processUpdatePensionDetails = (request, response) => {
         console.log(`${chalk.red ("Error: processUpdatePensionDetails " + error)}`)
     }) 
 }
-
 
 // * PROCESS ADD EDIT SECTION
 
@@ -573,30 +371,15 @@ const processMonthly = (request, response) => {
     }) 
 }
 
-
 module.exports = {
-    processWelcomeUser,
-    validateUsername,
-    validateUsername2,
-    processChangePW,
     processSearchClaimant,
     processBenefitOverview,
-    processEditProfile,
-    processUpdateEditProfile,
     processSecurityClearence,
     processClaimantDetails,
     processAppointeeDetails,
     processBankDetails,
     processPensionDetails,
     processPaymentHistory,
-    processUserMaintenance,
-    processNewUser,
-    processSystemUsers,
-    processDeleteUser,
-    processMakeAdmin,
-    processRemoveAdmin,
-    processActivateUser,
-    processDeactivateUser,
     processAddClaimant,
     processUpdateClaimant,
     processAddAppointee,

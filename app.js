@@ -140,11 +140,6 @@ app.post('/paymentRunOptions', (request, response) => {
     response.render('paymentRunOptions', {'message': ''})
 });
 
-
-
-
-
-
 // ! APP.LISTEN SECTION
 
 app.listen(8000, function() {

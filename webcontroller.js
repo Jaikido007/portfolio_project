@@ -1,6 +1,11 @@
 //const {encryptPassword, checkEncryptedPassword} = require ('./encrypt_password');
 const chalk = require('chalk');
 const webDbController = require('./webDatabaseController');
+const benefitClaimant = require('./benefit') 
+const claimantAppointee = require('./person')
+
+let searchedBenefitClaimant = new benefitClaimant
+let claimantsAppointee = new claimantAppointee
 
 const processSearchClaimant = (request, response) => {
     let enteredNino = request.body.nino;
@@ -80,7 +85,8 @@ const processClaimantDetails = (request, response) => {
     .then(result => {
         // RESEARCH LATER
         session.claimantID = result.rows[0].id
-        response.render('claimantDetails', {'items':result.rows[0]})
+        populateClaimantInClass(result);
+        response.render('claimantDetails', {'items':searchedBenefitClaimant})
     }
     )
 .catch(error => {
@@ -88,12 +94,32 @@ const processClaimantDetails = (request, response) => {
 })  
 }
 
+const populateClaimantInClass = (dbDetails) => {
+    searchedBenefitClaimant.setNino = dbDetails.rows[0].nino;
+    searchedBenefitClaimant.setTitle = dbDetails.rows[0].title;
+    searchedBenefitClaimant.setFirstName = dbDetails.rows[0].first_name;
+    searchedBenefitClaimant.setLastName = dbDetails.rows[0].last_name;
+    searchedBenefitClaimant.setDOB = dbDetails.rows[0].formatted_date;
+    searchedBenefitClaimant.setAddress1 = dbDetails.rows[0].address1;
+    searchedBenefitClaimant.setAddress2 = dbDetails.rows[0].address2;
+    searchedBenefitClaimant.setAddress3 = dbDetails.rows[0].address3;
+    searchedBenefitClaimant.setTown = dbDetails.rows[0].town;
+    searchedBenefitClaimant.setCounty = dbDetails.rows[0].county;
+    searchedBenefitClaimant.setPostcode = dbDetails.rows[0].postcode;
+    searchedBenefitClaimant.setAppointee = dbDetails.rows[0].appointee;
+    searchedBenefitClaimant.setSecurityQuestion1 = dbDetails.rows[0].sec_question1;
+    searchedBenefitClaimant.setSecurityQuestion2 = dbDetails.rows[0].sec_question2;
+    searchedBenefitClaimant.setSecurityAnswer1 = dbDetails.rows[0].sec_answer1;
+    searchedBenefitClaimant.setSecurityAnswer2 = dbDetails.rows[0].sec_answer2;
+}
+
 const processAppointeeDetails = (request, response) => {
     let session = request.session
     let nino = session.claimantNino
         webDbController.getAppointeeUserDetails(nino)
         .then(result => {
-            response.render('appointeeDetails', {'items':result.rows[0]})
+            populateAppointeeDetailsInClass(result)
+            response.render('appointeeDetails', {'items':claimantsAppointee})
         }
         )
     .catch(error => {
@@ -101,12 +127,28 @@ const processAppointeeDetails = (request, response) => {
     })  
 }
 
+const populateAppointeeDetailsInClass = (dbDetails) => {
+    claimantsAppointee.setNino = dbDetails.rows[0].app_nino;
+    claimantsAppointee.setTitle = dbDetails.rows[0].app_title;
+    claimantsAppointee.setFirstName = dbDetails.rows[0].app_first_name;
+    claimantsAppointee.setLastName = dbDetails.rows[0].app_last_name;
+    claimantsAppointee.setDOB = dbDetails.rows[0].formatted_date;
+    claimantsAppointee.setAddress1 = dbDetails.rows[0].app_address1;
+    claimantsAppointee.setAddress2 = dbDetails.rows[0].app_address2;
+    claimantsAppointee.setAddress3 = dbDetails.rows[0].app_address3;
+    claimantsAppointee.setTown = dbDetails.rows[0].app_town;
+    claimantsAppointee.setCounty = dbDetails.rows[0].app_county;
+    claimantsAppointee.setPostcode = dbDetails.rows[0].app_postcode;    
+}
+
+
 const processBankDetails = (request, response) => {
     let session = request.session
     let nino = session.claimantNino
     webDbController.getBankUserDetails(nino)
     .then(result => {
-        response.render('bankDetails', {'items':result.rows[0]})
+        populateBankDetailsInClass(result)
+        response.render('bankDetails', {'items':searchedBenefitClaimant})
     }
     )
 .catch(error => {
@@ -114,17 +156,30 @@ const processBankDetails = (request, response) => {
 })  
 }
 
+const populateBankDetailsInClass = (dbDetails) => {
+    searchedBenefitClaimant.setBankName = dbDetails.rows[0].bank_name;
+    searchedBenefitClaimant.setBankAccountNumber = dbDetails.rows[0].account_no;
+    searchedBenefitClaimant.setBankSortCode = dbDetails.rows[0].sort_code;
+}
+
 const processPensionDetails = (request, response) => {
     let session = request.session
     let nino = session.claimantNino
     webDbController.getPensionUserDetails(nino)
     .then(result => {
-        response.render('pensionDetails', {'items':result.rows[0]})
+        populatePensionDetailsInClass(result)
+        response.render('pensionDetails', {'items':searchedBenefitClaimant})
     }
     )
 .catch(error => {
     console.log(`${chalk.red ("Error: processBankDetails " + error)}`)
 })  
+}
+
+const populatePensionDetailsInClass = (dbDetails) => {
+    searchedBenefitClaimant.setPensionAmount = dbDetails.rows[0].pension_amount;
+    searchedBenefitClaimant.setPensionType = dbDetails.rows[0].pension_type;
+    searchedBenefitClaimant.setPensionFrequency = dbDetails.rows[0].frequency;
 }
 
 const processPaymentHistory = (request, response) => {
@@ -163,7 +218,11 @@ const processAddAppointee = (request, response) => {
 
 const processUpdateAppointee = (request, response) => {
     let session = request.session
-    let nino = session.claimantNino
+    let nino = claimantsAppointee.getNino;
+    console.log(request.body);
+    let bool_flag = checkforAppointeeUpdates(request.body)
+    if(bool_flag === true) {
+        console.log('Somet to update')
     webDbController.updateAppointeeInDB(nino, request.body)
     .then(result => {
         processAppointeeDetails(request, response);
@@ -171,6 +230,29 @@ const processUpdateAppointee = (request, response) => {
     .catch(error => {
         console.log(`${chalk.red ("Error: processUpdateAppointee " + error)}`)
     }) 
+} else {
+    console.log('Nowt to update')
+    processAppointeeDetails(request, response);
+}
+
+}
+
+const checkforAppointeeUpdates = (form_data) => {
+    if(
+    form_data.title != claimantsAppointee.getTitle ||
+    form_data.first_name != claimantsAppointee.getFirstName ||
+    form_data.last_name != claimantsAppointee.getLastName ||
+    form_data.address1 != claimantsAppointee.getAddress1 ||
+    form_data.address2 != claimantsAppointee.getAddress2 ||
+    form_data.address3 != claimantsAppointee.getAddress3 ||
+    form_data.town != claimantsAppointee.getTown ||
+    form_data.county != claimantsAppointee.getCounty ||
+    form_data.postcode != claimantsAppointee.getPostcode
+ ) {
+ return true
+} else {
+ return false
+}
 }
 
 const processAddBankDetails = (request, response) => {

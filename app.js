@@ -37,7 +37,7 @@ app.get('/login', (request, response) => {
     response.render('welcome');
 });
 
- app.get('/usermenu', webUserController.processUserMenu);
+app.get('/usermenu', webUserController.processUserMenu);
 
 app.get('/searchClaimant', (request, response) => {
     response.render('searchClaimant');
@@ -74,7 +74,7 @@ app.get('/newUser', (request, response) => {
 });
 
 
-// // APP.SET SECTION
+// APP.SET SECTION
 
 app.set('views', 'views');
 app.set('view engine', 'njk');

@@ -143,16 +143,16 @@ const updateAppointeeInDB = (nino, abc) => {
     let tableName = 'appointee';
     return client.query(
         `UPDATE ${tableName} SET 
-            title = '${abc.app_title}', 
-            first_name = '${abc.app_first_name}', 
-            last_name = '${abc.app_last_name}', 
-            address1 = '${abc.app_address1}', 
-            address2 = '${abc.app_address2}', 
-            address3 = '${abc.app_address3}', 
-            town = '${abc.app_town}', 
-            county = '${abc.app_county}', 
-            postcode = '${abc.app_postcode}'
-            WHERE nino = '${nino}'`
+            app_title = '${abc.title}', 
+            app_first_name = '${abc.first_name}', 
+            app_last_name = '${abc.last_name}', 
+            app_address1 = '${abc.address1}', 
+            app_address2 = '${abc.address2}', 
+            app_address3 = '${abc.address3}', 
+            app_town = '${abc.town}', 
+            app_county = '${abc.county}', 
+            app_postcode = '${abc.postcode}'
+            WHERE app_nino = '${nino}'`
     );
 }
 

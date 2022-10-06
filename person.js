@@ -40,11 +40,11 @@ class Person {
         return this.address1
     }
 
-    get getFirstName() {
+    get getAddress2() {
         return this.address2
     }
 
-    get getLastName() {
+    get getAddress3() {
         return this.address3
     }
 

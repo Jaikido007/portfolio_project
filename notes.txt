@@ -10,6 +10,9 @@ Change username takes you to TEST PAGE
 Change email takes you to TEST PAGE
 Change encrypted password DOES NOTHING
 
+Change claimant details:
+DOB displayed incorrectly
+
 Change appointee details:
 DOB displayed incorrectly
 

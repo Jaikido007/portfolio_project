@@ -171,15 +171,19 @@ const processNewUser = (request, response) => {
         .then (() => {
             webUserDbController.getSystemUserDetails()
             .then(result => {
-                response.render('userMaintenance', {'items':result.rows})
+                response.render('welcome', {'items':result.rows})
             })
         })
         .catch (error => {
-            console.log(`${chalk.red} ERROR: processNewUser 1st catch ` + error)
+            let message = ('Could not create user')
+            response.render('newUser', {message});
+            console.log(`${chalk.red ("Error: Process new user - 1st catch " + error)}`)
         })
     })
     .catch(error => {
-        console.log(`${chalk.red} Error: processNewUser 2nd catch` + error)
+        let message = ('Could not create user')
+        response.render('newUser', {message});
+        console.log(`${chalk.red ("Error: Process new user - 2nd catch " + error)}`)
     })
 }
 

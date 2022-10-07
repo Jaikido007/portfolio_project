@@ -65,7 +65,10 @@ const processSecurityClearence = (request, response) => {
     webDbController.verifySecurityDetails(nino)
     .then (result => {
         if (dobNum != result.rows[0].dob || request.body.sec1 != result.rows[0].sec_answer1 || request.body.sec2 != result.rows[0].sec_answer2) {
-            console.log(`${chalk.red ("Error: You've probably mistyped the password Jay ")}`)
+            console.log(`${chalk.red ("Error: Security clearence failed!")}`)
+            let message = ('Failed security checks, please try again')
+            response.render('searchClaimant', {message});
+
         } else {
             processClaimantDetails(request, response);
         }
@@ -248,10 +251,10 @@ const checkforAppointeeUpdates = (form_data) => {
     form_data.town != claimantsAppointee.getTown ||
     form_data.county != claimantsAppointee.getCounty ||
     form_data.postcode != claimantsAppointee.getPostcode
- ) {
- return true
+) {
+return true
 } else {
- return false
+return false
 }
 }
 

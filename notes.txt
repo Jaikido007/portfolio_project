@@ -1,18 +1,15 @@
-Refactor into classes/inheritence
-
 Unit testing
-
-
-gov.uk needs to point to login
 
 remove uneccesary console.logs
 
+Sign in:
+Signing in with a valid user but they're not an ACTIVE USER breaks it - wheel of death
 
-VALIDATION:
+Edit profile:
+Change username takes you to TEST PAGE
+Change email takes you to TEST PAGE
+Change encrypted password DOES NOTHING
 
-Welcome.njk has no validation or messages
-new user.njk Can create a user with only USER STATUS
-
-
-
+Change appointee details:
+DOB displayed incorrectly
 

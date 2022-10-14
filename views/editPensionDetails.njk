@@ -19,11 +19,19 @@
       href: "usermenu"
     },
     {
-      text: "New claimant",
-      href: "usermenu"
+      text: "Search claimant",
+      href: "searchClaimant"
+    },
+    {
+      text: "Security clearence",
+      href: "securityLogin"
     },
       {
-      text: "Add pension details",
+      text: "Pension details",
+      href: "pensionDetails"
+    },
+          {
+      text: "Change pension details",
       href: "addPensionDetails"
     }
   ]
@@ -35,9 +43,29 @@
     Contents
   </h2>
   <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/claimantDetails">
+        Claimant details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/appointeeDetails">
+        Appointee details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/bankDetails">
+        Bank details
+      </a>
+    </li>
     <li class="govuk-tabs__list-item  govuk-tabs__list-item--selected">
       <a class="govuk-tabs__tab" href="/pensionDetails">
         Pension details
+      </a>
+    </li>
+        <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/paymentHistory">
+        Payment history
       </a>
     </li>
   </ul>
@@ -48,7 +76,7 @@
 
     <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-          <form action="addPensionDetails" method="POST" id="formAddPensionDetails">
+          <form action="updatePensionDetails" method="POST" id="formUpdatePensionDetails">
       <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="pension_type">
       Pension type
         </label>
@@ -56,7 +84,7 @@
     </dt>
 
     {# <dd class="govuk-summary-list__value">
-      <input class="govuk-input" id="pension_type" name="pension_type" type="text">
+      <input  {% if(items.pension_type == '')  %} value="" {% elif(items.pension_type !='')%} value="{{items.pension_type}}" {% endif %} class="govuk-input" id="pension_type" name="pension_type" type="text">
     </dd> #}
 
     <div class="govuk-form-group">
@@ -80,7 +108,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input class="govuk-input" id="pension_amount" name="pension_amount" type="text">
+      <input  {% if(items.pension_amount == '')  %} value="" {% elif(items.pension_amount !='')%} value="{{items.pension_amount}}" {% endif %} class="govuk-input" id="pension_amount" name="pension_amount" type="text">
     </dd>
   </div>
 
@@ -103,9 +131,13 @@
 
 
 <table>
+    <form action="addPensionDetails" method="POST" id="formAddPensionDetails">
+        <input type="hidden" name="hiddenAddPensionDetails" id="hiddenAddPensionDetails" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddPensionDetails" formaction="addAppointee">Add Pension Details</button>
+    &nbsp;
 
         <input type="hidden" name="hiddenUpdatePensionDetails" id="hiddenUpdatePensionDetails" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdatePensionDetails">Save Customer Details</button>
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdatePensionDetails">Update Pension Details</button>
     </form> </dl>
   </table>
 

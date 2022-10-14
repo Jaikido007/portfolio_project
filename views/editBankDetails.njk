@@ -19,11 +19,19 @@
       href: "usermenu"
     },
     {
-      text: "New claimant",
-      href: "usermenu"
+      text: "Search claimant",
+      href: "searchClaimant"
+    },
+    {
+      text: "Security clearence",
+      href: "securityLogin"
     },
       {
-      text: "Add bank details",
+      text: "Bank details",
+      href: "bankDetails"
+    },
+          {
+      text: "Change bank details",
       href: "addBankDetails"
     }
   ]
@@ -35,9 +43,29 @@
     Contents
   </h2>
   <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/claimantDetails">
+        Claimant details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/appointeeDetails">
+        Appointee details
+      </a>
+    </li>
     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
       <a class="govuk-tabs__tab" href="/bankDetails">
         Bank details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/pensionDetails">
+        Pension details
+      </a>
+    </li>
+        <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/paymentHistory">
+        Payment history
       </a>
     </li>
   </ul>
@@ -48,7 +76,7 @@
 
     <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-          <form action="addBankDetails" method="POST" id="formAddBankDetails">
+          <form action="updateBankDetails" method="POST" id="formUpdateBankDetails">
       <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="bank_name">
         Bank/Building society name
         </label>
@@ -56,7 +84,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input class="govuk-input" id="bank_name" name="bank_name" type="text">
+      <input  {% if(items.bank_name == '')  %} value="" {% elif(items.bank_name !='')%} value="{{items.bank_name}}" {% endif %} class="govuk-input" id="bank_name" name="bank_name" type="text">
     </dd>
   </div>
 
@@ -69,7 +97,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input class="govuk-input" id="account_no" name="account_no" type="text">
+      <input  {% if(items.account_no == '')  %} value="" {% elif(items.account_no !='')%} value="{{items.account_no}}" {% endif %} class="govuk-input" id="account_no" name="account_no" type="text">
     </dd>
   </div>
 
@@ -82,14 +110,20 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input class="govuk-input" id="sort_code" name="sort_code" type="text">
+      <input  {% if(items.sort_code == '')  %} value="" {% elif(items.sort_code !='')%} value="{{items.sort_code}}" {% endif %} class="govuk-input" id="sort_code" name="sort_code" type="text">
     </dd>
   </div>
 
 </dl>
 
+    {# <form action="addBankDetails" method="POST" id="formAddBankDetails"> #}
+        <input type="hidden" name="hiddenAddBankDetails" id="hiddenAddBankDetails" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddBankDetails" formaction="addAppointee">Add Bank Details</button>
+    {# </form>  #}
+    &nbsp;
+
         <input type="hidden" name="hiddenUpdateBankDetails" id="hiddenUpdateBankDetails" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddBankDetails">Next Page</button>
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateBankDetails">Update Bank Details</button>
     </form> 
 
 {% endblock %}

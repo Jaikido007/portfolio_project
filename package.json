@@ -1,11 +1,11 @@
 {
-  "name": "trevor_project",
+  "name": "PSCS_Pension_Payment_account",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha './unit-tests/*.test.js'"
   },
   "author": "",
   "license": "ISC",
@@ -18,17 +18,22 @@
     "express-session": "^1.17.3",
     "govuk-frontend": "^4.1.0",
     "http": "^0.0.1-security",
-    "nodemon": "^2.0.19",
+    "nodemon": "^2.0.20",
     "nunjucks": "^3.2.3",
     "path": "^0.12.7",
     "pg": "^8.7.3",
     "uuid": "^8.3.2"
   },
+  "devDependencies": { 
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "sinon": "^14.0.1"
+  },
   "nodemonConfig": {
     "restartable": "rs",
     "delay": 2500,
     "env": {
-      "PORT": 8001
+      "PORT": 8000
     }
   }
 }

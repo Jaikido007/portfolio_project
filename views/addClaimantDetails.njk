@@ -19,20 +19,8 @@
       text: "User menu",
       href: "usermenu"
     },
-    {
-      text: "Search claimant",
-      href: "searchClaimant"
-    },
-    {
-      text: "Security clearence",
-      href: "securityLogin"
-    },
-      {
-      text: "Claimant details",
-      href: "claimantDetails"
-    },
           {
-      text: "Change claimant details",
+      text: "Add claimant details",
       href: "addClaimantDetails"
     }
   ]
@@ -48,27 +36,6 @@
       <a class="govuk-tabs__tab" href="/claimantDetails">
         Claimant details
       </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/appointeeDetails">
-        Appointee details
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/bankDetails">
-        Bank details
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/pensionDetails">
-        Pension details
-      </a>
-    </li>
-        <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/paymentHistory">
-        Payment history
-      </a>
-    </li>
   </ul>
   <div class="govuk-tabs__panel" id="claimantDetails">
     <h2 class="govuk-heading-l">Enter claimant details</h2>
@@ -80,10 +47,11 @@
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
+        <form action="addClaimantDetails" method="POST" id="addClaimantDetails">
       NI Number
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.nino}}
+      <input class="govuk-input" id="nino" name="nino" type="text">
     </dd>
   </div>
 
@@ -91,7 +59,7 @@
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-    <form action="updateClaimant" method="POST" id="formUpdateClaimant">
+
       <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="title">
           Title
         </label>
@@ -99,7 +67,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.title == '')  %} value="" {% elif(items.title !='')%} value="{{items.title}}" {% endif %} class="govuk-input" id="title" name="title" type="text">
+      <input class="govuk-input" id="title" name="title" type="text">
     </dd>
   </div>
 
@@ -112,7 +80,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.first_name == '')  %} value="" {% elif(items.first_name !='')%} value="{{items.first_name}}" {% endif %}class="govuk-input" id="first_name" name="first_name" type="text">
+      <input class="govuk-input" id="first_name" name="first_name" type="text">
     </dd>
   </div>
 
@@ -125,16 +93,19 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.last_name == '')  %} value="" {% elif(items.last_name !='')%} value="{{items.last_name}}" {% endif %} class="govuk-input" id="last_name" name="last_name" type="text">
+      <input class="govuk-input" id="last_name" name="last_name" type="text">
     </dd>
   </div>
 
-  <div class="govuk-summary-list__row">
+ <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      Date of birth
+      <h1  class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="dob">
+         Date of Birth
+        </label>
+        </h1>
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.dob}}
+      <input class="govuk-input" id="dob" name="dob" type="text">
     </dd>
   </div>
 
@@ -147,7 +118,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.address1 == '')  %} value="" {% elif(items.address1 !='')%} value="{{items.address1}}" {% endif %}} class="govuk-input" id="address1" name="address1" type="text">
+      <input class="govuk-input" id="address1" name="address1" type="text">
     </dd>
   </div>
 
@@ -160,7 +131,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.address2 == '')  %} value="" {% elif(items.address2 !='')%} value="{{items.address2}}" {% endif %} class="govuk-input" id="address2" name="address2" type="text">
+      <input class="govuk-input" id="address2" name="address2" type="text">
     </dd>
   </div>
 
@@ -173,7 +144,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.address3 == '')  %} value="" {% elif(items.address3 !='')%} value="{{items.address3}}" {% endif %} class="govuk-input" id="address3" name="address3" type="text">
+      <input class="govuk-input" id="address3" name="address3" type="text">
     </dd>
   </div>
 
@@ -186,7 +157,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.town == '')  %} value="" {% elif(items.town !='')%} value="{{items.town}}" {% endif %} class="govuk-input" id="town" name="town" type="text">
+      <input class="govuk-input" id="town" name="town" type="text">
     </dd>
   </div>
 
@@ -199,7 +170,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input  {% if(items.county == '')  %} value="" {% elif(items.county !='')%} value="{{items.county}}" {% endif %}class="govuk-input" id="county" name="county" type="text">
+      <input class="govuk-input" id="county" name="county" type="text">
     </dd>
   </div>
 
@@ -212,7 +183,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.postcode == '')  %} value="" {% elif(items.postcode !='')%} value="{{items.postcode}}" {% endif %} class="govuk-input" id="postcode" name="postcode" type="text">
+      <input class="govuk-input" id="postcode" name="postcode" type="text">
     </dd>
   </div>
 
@@ -263,7 +234,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.sec_answer1 == '')  %} value="" {% elif(items.sec_answer1 !='')%} value="{{items.sec_answer1}}" {% endif %} class="govuk-input" id="secA1" name="secA1" type="text">
+      <input class="govuk-input" id="secA1" name="secA1" type="text">
     </dd>
   </div>
 
@@ -276,7 +247,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.sec_answer2 == '')  %} value="" {% elif(items.sec_answer2 !='')%} value="{{items.sec_answer2}}" {% endif %} class="govuk-input" id="secA2" name="secA2" type="text">
+      <input class="govuk-input" id="secA2" name="secA2" type="text">
     </dd>
   </div>
 
@@ -285,40 +256,17 @@
       Appointee
     </dt>
     <dd class="govuk-summary-list__value">
-      {{items.appointee}}
+      <input class="govuk-input" id="appointee" name="appointee" type="text">
     </dd>
   </div>
 </dl>
 
-    <script>
-        $(document).ready(function () {
-          let nino = 'JW010203A'
-          console.log(nino) 
-
-          if(nino != ''){
-                  $('#btaddClaimant').prop('disabled', true);
-                  $('#btupdateClaimant').prop('disabled', false);
-                  $("#formAddClaimant"). css("display", "none");
-                  $("#formUpdateClaimant"). css("display", "block");
-              } else {
-                  $('#btAddClaimant').prop('disabled', false);
-                  $('#btUpdateClaimant').prop('disabled', true);
-                  $("#formAddClaimant"). css("display", "block");
-                  $("#formUpdateClaimant"). css("display", "none");
-                    }           
-        });
-    </script>
 
 <table>
-    {# <form action="addClaimant" method="POST" id="formAddClaimant"> #}
-        <input type="hidden" name="hiddenAddClaimant" id="hiddenAddClaimant" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddClaimant" formaction="addClaimant">Add Claimant</button>
-    {# </form>  #}
-    &nbsp;
+  <input type="hidden" name="hiddenUpdateClaimant" id="hiddenUpdateClaimant" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddClaimant">Next Page</button>
 
-        <input type="hidden" name="hiddenUpdateClaimant" id="hiddenUpdateClaimant" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateClaimant">Update Claimant</button>
-    </form> 
+</form> 
   </table>
 
 {% endblock %}

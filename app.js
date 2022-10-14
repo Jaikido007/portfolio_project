@@ -16,6 +16,8 @@ const webPaymentController = require('./webPaymentController');
 app.use(express.static(path.join('./public/')));
 app.use('assets', express.static(path.join(__dirname, '../assets')));
 
+// SESSIONS
+
 let PostgreSqlStore = require('connect-pg-simple')(sessions);
 let sessionOptions = {
     secret:'BobbleHeadSausageFace', 
@@ -68,6 +70,8 @@ app.get('/updateEditProfile', webUserController.processUpdateEditProfile);
 app.get('/pwmenu', (request, response) => {
     response.render('pwmenu');
 });
+
+
 
 app.get('/newUser', (request, response) => {
     response.render('newUser');
@@ -139,6 +143,10 @@ app.post('/processMonthly', webPaymentController.processMonthly);
 app.post('/paymentRunOptions', (request, response) => {
     response.render('paymentRunOptions', {'message': ''})
 });
+
+app.post('/newClaimant', webController.processNewClaimant);
+
+app.post('/addClaimantDetails', webController.processUpdateClaimant2);
 
 // ! APP.LISTEN SECTION
 

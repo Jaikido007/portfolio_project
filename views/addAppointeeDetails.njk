@@ -19,20 +19,12 @@
       href: "usermenu"
     },
     {
-      text: "Search for claimant",
-      href: "searchClaimant"
-    },
-    {
-      text: "Security clearence",
-      href: "securityLogin"
+      text: "New claimant",
+      href: "usermenu"
     },
       {
-      text: "Appointee details",
-      href: "appointeeDetails"
-    },
-          {
-      text: "Change appointee details",
-      href: "addAppointeeDetails"
+      text: "Add appointee details",
+      href: "addappointeeDetails"
     }
   ]
 }) }}
@@ -43,29 +35,9 @@
     Contents
   </h2>
   <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/claimantDetails">
-        Claimant details
-      </a>
-    </li>
     <li class="govuk-tabs__list-item  govuk-tabs__list-item--selected">
       <a class="govuk-tabs__tab" href="/appointeeDetails">
         Appointee details
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/bankDetails">
-        Bank details
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/pensionDetails">
-        Pension details
-      </a>
-    </li>
-        <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="/paymentHistory">
-        Payment history
       </a>
     </li>
   </ul>
@@ -79,16 +51,20 @@
 
     <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      NI Number
+        <form action="addAppointee" method="POST" id="formAddAppointee">
+      <h1  class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_nino">
+          National Insurance No
+        </label>
+        </h1>
     </dt>
+
     <dd class="govuk-summary-list__value">
-      {{items.app_nino}}
+      <input class="govuk-input" id="app_nino" name="app_nino" type="text">
     </dd>
   </div>
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-    <form action="updateAppointee" method="POST" id="formUpdateAppointee">
       <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_title">
           Title
         </label>
@@ -96,7 +72,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.app_title == '')  %} value="" {% elif(items.app_title !='')%} value="{{items.app_title}}" {% endif %} class="govuk-input" id="title" name="title" type="text">
+      <input class="govuk-input" id="title" name="title" type="text">
     </dd>
   </div>
 
@@ -109,7 +85,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.app_first_name == '')  %} value="" {% elif(items.app_first_name !='')%} value="{{items.app_first_name}}" {% endif %}class="govuk-input" id="first_name" name="first_name" type="text">
+      <input class="govuk-input" id="first_name" name="first_name" type="text">
     </dd>
   </div>
 
@@ -122,16 +98,20 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.app_last_name == '')  %} value="" {% elif(items.app_last_name !='')%} value="{{items.app_last_name}}" {% endif %} class="govuk-input" id="last_name" name="last_name" type="text">
+      <input class="govuk-input" id="last_name" name="last_name" type="text">
     </dd>
   </div>
 
-  <div class="govuk-summary-list__row">
+   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      Date of birth
+      <h1  class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="app_dob">
+          Date of Birth
+        </label>
+        </h1>
     </dt>
+
     <dd class="govuk-summary-list__value">
-      {{items.dob}}
+      <input class="govuk-input" id="app_dob" name="app_dob" type="text">
     </dd>
   </div>
 
@@ -144,7 +124,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.app_address1 == '')  %} value="" {% elif(items.app_address1 !='')%} value="{{items.app_address1}}" {% endif %} class="govuk-input" id="address1" name="address1" type="text">
+      <input class="govuk-input" id="address1" name="address1" type="text">
     </dd>
   </div>
 
@@ -157,7 +137,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.app_address2 == '')  %} value="" {% elif(items.app_address2 !='')%} value="{{items.app_address2}}"{% endif %} class="govuk-input" id="address2" name="address2" type="text">
+      <input class="govuk-input" id="address2" name="address2" type="text">
     </dd>
   </div>
 
@@ -170,7 +150,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.app_address3 == '')  %} value="" {% elif(items.app_address3 !='')%} value="{{items.app_address3}}" {% endif %} class="govuk-input" id="address3" name="address3" type="text">
+      <input class="govuk-input" id="address3" name="address3" type="text">
     </dd>
   </div>
 
@@ -183,7 +163,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input {% if(items.app_town == '')  %} value="" {% elif(items.app_town !='')%} value="{{items.app_town}}" {% endif %} class="govuk-input" id="town" name="town" type="text">
+      <input class="govuk-input" id="town" name="town" type="text">
     </dd>
   </div>
 
@@ -196,7 +176,7 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input  {% if(items.app_county == '')  %} value="" {% elif(items.app_county !='')%} value="{{items.app_county}}" {% endif %}class="govuk-input" id="county" name="county" type="text">
+      <input class="govuk-input" id="county" name="county" type="text">
     </dd>
   </div>
 
@@ -209,20 +189,13 @@
     </dt>
 
     <dd class="govuk-summary-list__value">
-      <input  {% if(items.app_postcode == '')  %} value="" {% elif(items.app_postcode !='')%} value="{{items.app_postcode}}" {% endif %}class="govuk-input" id="postcode" name="postcode" type="text">
+      <input class="govuk-input" id="postcode" name="postcode" type="text">
     </dd>
   </div>
 
   </dl>
-
-    {# <form action="addClaimant" method="POST" id="formAddAppointee"> #}
-        <input type="hidden" name="hiddenAddAppointee" id="hiddenAddAppointee" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddAppointee" formaction="addAppointee">Add Appointee</button>
-    {# </form>  #}
-    &nbsp;
-
         <input type="hidden" name="hiddenUpdateAppointee" id="hiddenUpdateAppointee" />
-        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateAppointee">Update Appointee</button>
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateAppointee">Next Page</button>
     </form> 
 
 {% endblock %}

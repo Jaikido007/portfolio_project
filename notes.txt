@@ -16,3 +16,13 @@ DOB displayed incorrectly
 Change appointee details:
 DOB displayed incorrectly
 
+    // "test": "echo \"Error: no test specified\" && exit 1"
+
+    Fix New Claimant - Appointee
+    force uppercase on new claimant adding NINO
+
+    Error: processAppointeeDetails TypeError: Cannot read properties of undefined (reading 'app_nino')
+
+    Appointee - never uses app_sec_question1, app_sec_question2 and relationship in appointee table
+
+    Add claimant id and appointee id to newClaimantProcess

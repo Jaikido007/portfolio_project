@@ -1,1 +1,81 @@
-<h1>Test Page</h1>
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+{% endblock %}
+
+{% block content %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+    {
+      text: "User menu",
+      href: "usermenu"
+    },
+    {
+      text: "Search claimant",
+      href: "searchClaimant"
+    }
+  ]
+}) }}
+<br>
+
+
+    <h2 class="govuk-heading-l">Edit User Profile</h2>
+        <form action="updateUserProfile" method="POST" id="formUpdateUserProfile">
+
+<dl class="govuk-summary-list">
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Username
+    </dt>
+    <dd class="govuk-summary-list__value">
+     {{items.username}}
+     <input class="govuk-input" id="email" name="username" type="hidden" value={{items.username}}>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Email
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <input class="govuk-input" id="email" name="email" type="text" value={{items.email}}>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Password
+    </dt>
+    <dd class="govuk-summary-list__value">
+      ********
+    </dd>
+  </div>
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Account Type
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.type}}
+    </dd>
+  </div>
+<br />
+<br />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateProfile">Update Profile</button>
+    </form> 
+
+</dl>
+
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}

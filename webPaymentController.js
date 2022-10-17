@@ -47,7 +47,7 @@ const processWeekly = (request, response) => {
 }
 
 const processMonthly = (request, response) => {
-    webPayementDbController.getPaymentFrequencyID('Monthly')
+    webPaymentDbController.getPaymentFrequencyID('Monthly')
     .then(result => {
         let payFrequency = result.rows[0].id
         webPaymentDbController.getClaimantsReqPayment(payFrequency)

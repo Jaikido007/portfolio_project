@@ -136,6 +136,7 @@ app.post('/addBankDetails', webController.processAddBankDetails);
 app.post('/updateBankDetails', webController.processUpdateBankDetails);
 app.post('/addPensionDetails', webController.processAddPensionDetails);
 app.post('/updatePensionDetails', webController.processUpdatePensionDetails);
+app.post('/updateUserProfile', webUserController.processUpdateUserProfile);
 
 app.post('/processWeekly', webPaymentController.processWeekly);
 app.post('/processMonthly', webPaymentController.processMonthly);

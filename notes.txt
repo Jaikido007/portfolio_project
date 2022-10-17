@@ -2,27 +2,4 @@ Unit testing
 
 remove uneccesary console.logs
 
-Sign in:
-Signing in with a valid user but they're not an ACTIVE USER breaks it - wheel of death
-
-Edit profile:
-Change username takes you to TEST PAGE
-Change email takes you to TEST PAGE
-Change encrypted password DOES NOTHING
-
-Change claimant details:
-DOB displayed incorrectly
-
-Change appointee details:
-DOB displayed incorrectly
-
-    // "test": "echo \"Error: no test specified\" && exit 1"
-
-    Fix New Claimant - Appointee
-    force uppercase on new claimant adding NINO
-
-    Error: processAppointeeDetails TypeError: Cannot read properties of undefined (reading 'app_nino')
-
-    Appointee - never uses app_sec_question1, app_sec_question2 and relationship in appointee table
-
-    Add claimant id and appointee id to newClaimantProcess
+webPayementDbController is not defined

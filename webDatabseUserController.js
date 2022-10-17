@@ -12,8 +12,10 @@ const checkUsernameExists = (username) => {
 
 const getUsernameAndPassword = ({username}) => {
     let tableName = 'system_users';
+    let query = `SELECT encrypted_password, email, is_active FROM ${tableName} WHERE username = '${username}'`
+   console.log(query)
     return client.query(
-        `SELECT encrypted_password, is_active FROM ${tableName} WHERE username = '${username}'`,
+        `SELECT encrypted_password, email, is_active FROM ${tableName} WHERE username = '${username}'`,
     );
 }
 
@@ -47,6 +49,14 @@ const checkUserValidToResetPassword = (cui) => {
 )
 }
 
+const updateEditUserProfile = (email, username) => {
+    let tableName = 'system_users'
+    return client.query(
+        `UPDATE ${tableName} SET email = '${email}'
+        WHERE username = '${username}'`
+    )    
+}
+
 const changeUserPW = (cui, password) => {
     let tableName = 'system_users';
     return client.query(
@@ -58,7 +68,7 @@ const getSystemUserDetails = (username) => {
     let tableName = 'system_users';
     let tableName2 = 'user_types';
     return client.query(
-        `SELECT ${tableName}.id, ${tableName}.username, ${tableName}.email, ${tableName2}.type, ${tableName}.is_active FROM ${tableName}  
+        `SELECT ${tableName}.id, ${tableName}.username, ${tableName}.email, ${tableName}.encrypted_password, ${tableName2}.type, ${tableName}.is_active FROM ${tableName}  
         LEFT JOIN ${tableName2}
         ON ${tableName}.user_type = ${tableName2}.id
         WHERE ${tableName}.username = '${username}'
@@ -143,6 +153,7 @@ module.exports = {
     initiatePasswordReset,
     getUUID,
     checkUserValidToResetPassword,
+    updateEditUserProfile,
 }
 
 

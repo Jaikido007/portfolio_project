@@ -1,6 +1,7 @@
 const {encryptPassword, checkEncryptedPassword} = require ('./encrypt_password');
 const chalk = require('chalk');
 const webUserDbController = require('./webDatabseUserController');
+const { response } = require('express');
 
 let session
 const processLoginUser = (request, response) => {
@@ -31,6 +32,10 @@ const processLoginUser = (request, response) => {
                         response.status(500).send(error);
                         console.log(`${chalk.red ("Error: Issue comparing passwords " + error)}`)
                     }); 
+                } else {
+                    response.render ('welcome', {'message':'Please contact your system administrator'})
+                    console.log(`${chalk.red ("Inactive User trying to log in")}`)
+                
                 }
             }) 
                 .catch(() => response.status(500).send(`ERROR, couldn't retrieve username and password`));
@@ -129,11 +134,47 @@ const processEditProfile = (request, response) => {
 
 
 const processUpdateEditProfile = (request, response) => {
-    response.render('updateEditProfile')
+    session = request.session
+    if(session.username == null){
+        response.render('welcome', {'message': 'Session timeout'})
+    } else {
+        console.log(`${chalk.red ("Error: processEditProfile ")}`)
+        let username = session.username
+        webUserDbController.getSystemUserDetails(username)
+        .then(result => {
+            response.render('updateEditProfile', {'items':result.rows[0]})
+        }
+        )
+    .catch(error => {
+        console.log(`${chalk.red ("Error: processEditProfile " + error)}`)
+    })  
+    }
 }
 
 const processWelcomeUser = (request, response) => {
     response.render('welcome', {'message': ''})
+}
+
+const processUpdateUserProfile = (request, response) => {
+    let session = request.session
+    let username = session.username
+    webUserDbController.getUsernameAndPassword({username})
+    .then(result => {
+        if(result.rows[0].email != request.body.email) {
+            webUserDbController.updateEditUserProfile(request.body.email, username)
+            .then(result => {
+                response.render('usermenu');
+            })
+            .catch(error => {
+                console.log(`${chalk.red ("Error: Updating Edit User Profile" + error)}`)
+            })
+        } else {
+            response.render('usermenu')
+        }
+    })
+    .catch(error => {
+        console.log(`${chalk.red ("Error: Getting Username and Password" + error)}`)
+    })
 }
 
 const processUserMaintenance = (request, response) => {
@@ -250,4 +291,5 @@ module.exports = {
     processRemoveAdmin,
     processActivateUser,
     processDeactivateUser,
+    processUpdateUserProfile,
 }

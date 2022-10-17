@@ -1,0 +1,330 @@
+{% extends "govuk/template.njk" %}
+  {% block head %}
+<!--[if !IE 8]><!-->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+
+{% endblock %}
+
+{% block content %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: "login"
+    },
+    {
+      text: "User menu",
+      href: "usermenu"
+    },
+    {
+      text: "Search claimant",
+      href: "searchClaimant"
+    },
+    {
+      text: "Security clearence",
+      href: "securityLogin"
+    },
+      {
+      text: "Claimant details",
+      href: "claimantDetails"
+    },
+          {
+      text: "CEdit claimant details",
+      href: "editClaimantDetails"
+    }
+  ]
+}) }}
+<br>
+
+<div class="govuk-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">
+    Contents
+  </h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="/claimantDetails">
+        Claimant details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/appointeeDetails">
+        Appointee details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/bankDetails">
+        Bank details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/pensionDetails">
+        Pension details
+      </a>
+    </li>
+        <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="/paymentHistory">
+        Payment history
+      </a>
+    </li>
+  </ul>
+  <div class="govuk-tabs__panel" id="claimantDetails">
+    <h2 class="govuk-heading-l">Enter claimant details</h2>
+
+    {# ! Titles and Input #}
+
+<dl class="govuk-summary-list">
+
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      NI Number
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.nino}}
+    </dd>
+  </div>
+
+
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+    <form action="updateClaimant" method="POST" id="formUpdateClaimant">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="title">
+          Title
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.title == '')  %} value="" {% elif(items.title !='')%} value="{{items.title}}" {% endif %} class="govuk-input" id="title" name="title" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="first_name">
+          First name
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.first_name == '')  %} value="" {% elif(items.first_name !='')%} value="{{items.first_name}}" {% endif %}class="govuk-input" id="first_name" name="first_name" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1  class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="last_name">
+          Last name
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.last_name == '')  %} value="" {% elif(items.last_name !='')%} value="{{items.last_name}}" {% endif %} class="govuk-input" id="last_name" name="last_name" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Date of birth
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.formatted_date}}
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="address1">
+          Address 1
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.address1 == '')  %} value="" {% elif(items.address1 !='')%} value="{{items.address1}}" {% endif %}} class="govuk-input" id="address1" name="address1" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="address2">
+          Address 2
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.address2 == '')  %} value="" {% elif(items.address2 !='')%} value="{{items.address2}}" {% endif %} class="govuk-input" id="address2" name="address2" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="address3">
+          Address 3
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.address3 == '')  %} value="" {% elif(items.address3 !='')%} value="{{items.address3}}" {% endif %} class="govuk-input" id="address3" name="address3" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="town">
+          Town
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.town == '')  %} value="" {% elif(items.town !='')%} value="{{items.town}}" {% endif %} class="govuk-input" id="town" name="town" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="county">
+          County
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input  {% if(items.county == '')  %} value="" {% elif(items.county !='')%} value="{{items.county}}" {% endif %}class="govuk-input" id="county" name="county" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="postcode">
+          Post code
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.postcode == '')  %} value="" {% elif(items.postcode !='')%} value="{{items.postcode}}" {% endif %} class="govuk-input" id="postcode" name="postcode" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="sc1">
+          Security question 1
+        </label>
+        </h1>
+    </dt>
+
+    <div class="govuk-form-group">
+
+    <select class="govuk-select" id="secQ1" name="secQ1">
+    <option value="{{items.sec1id}}" selected>{{items.sec_question1}}</option>
+    {% for secQuestion in secQuestions %} 
+    <option value="{{secQuestion.id}}">{{secQuestion.question}}</option>
+    {% endfor %}
+  </select>
+</div>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="sc2">
+          Security question 2
+        </label>
+        </h1>
+    </dt>
+
+<div class="govuk-form-group">
+
+    <select class="govuk-select" id="secQ2" name="secQ2">
+    <option value="{{items.sec2id}}" selected>{{items.sec_question2}}</option>
+    {% for secQuestion in secQuestions %} 
+    <option value="{{secQuestion.id}}">{{secQuestion.question}}</option>
+    {% endfor %}
+  </select>
+</div>
+  </div>
+
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="sa1">
+          Security answer 1
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.sec_answer1 == '')  %} value="" {% elif(items.sec_answer1 !='')%} value="{{items.sec_answer1}}" {% endif %} class="govuk-input" id="secA1" name="secA1" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <h1 class="govuk-heading-m"><label class="govuk-label govuk-label--s" for="sa2">
+          Security answer 2
+        </label>
+        </h1>
+    </dt>
+
+    <dd class="govuk-summary-list__value">
+      <input {% if(items.sec_answer2 == '')  %} value="" {% elif(items.sec_answer2 !='')%} value="{{items.sec_answer2}}" {% endif %} class="govuk-input" id="secA2" name="secA2" type="text">
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Appointee
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{items.appointee}}
+    </dd>
+  </div>
+</dl>
+
+    <script>
+        $(document).ready(function () {
+          let nino = 'JW010203A'
+          console.log(nino) 
+
+          if(nino != ''){
+                  $('#btaddClaimant').prop('disabled', true);
+                  $('#btupdateClaimant').prop('disabled', false);
+                  $("#formAddClaimant"). css("display", "none");
+                  $("#formUpdateClaimant"). css("display", "block");
+              } else {
+                  $('#btAddClaimant').prop('disabled', false);
+                  $('#btUpdateClaimant').prop('disabled', true);
+                  $("#formAddClaimant"). css("display", "block");
+                  $("#formUpdateClaimant"). css("display", "none");
+                    }           
+        });
+    </script>
+
+<table>
+    {# <form action="addClaimant" method="POST" id="formAddClaimant"> #}
+        <input type="hidden" name="hiddenAddClaimant" id="hiddenAddClaimant" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btaddClaimant" formaction="addClaimant">Add Claimant</button>
+    {# </form>  #}
+    &nbsp;
+
+        <input type="hidden" name="hiddenUpdateClaimant" id="hiddenUpdateClaimant" />
+        <button class="govuk-button" data-module="govuk-button" type="submit" id="btupdateClaimant">Update Claimant</button>
+    </form> 
+  </table>
+
+{% endblock %}
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <script src="styles/all.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}
